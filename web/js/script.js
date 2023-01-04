@@ -12,17 +12,55 @@ function download(filename, text) {
     document.body.removeChild(element);
 }
 
+function removeAllChildNodes(parent) {
+    while (parent.firstChild) {
+        parent.removeChild(parent.firstChild);
+    }
+}
+
+function isOptionInSelector(selector, optionText) {
+    for (const option of selector.children)
+        if (option.getAttribute("value") == optionText)
+            return true;
+    return false;
+}
+
+function getOptionsInSelector(selector) {
+    const options = [];
+    for (const option of selector.children)
+        options.push(option.getAttribute("value"));
+    return options;
+}
+
+function updateSelectors(tagContains, optionList) {
+    const selectors = document.querySelectorAll("select[name*='" + tagContains + "']");
+    selectors.forEach(selector => {
+        updateSelector(selector, optionList);
+    });
+}
+
+function updateSelector(selector, optionList) {
+    optionList.forEach(optionName => {
+        if (!isOptionInSelector(selector, optionName)) {
+            const option = document.createElement("option");
+            option.setAttribute("value", optionName);
+            option.appendChild(document.createTextNode(optionName));
+            selector.appendChild(option);
+        }
+    });
+}
+
 function createCheckboxInput(labelText, labelRef) {
-    let div = document.createElement("div");
+    const div = document.createElement("div");
     
-    let booldiv = document.createElement("div");
+    const booldiv = document.createElement("div");
     booldiv.setAttribute("class", "bool");
 
-    let label = document.createElement("label");
+    const label = document.createElement("label");
     label.setAttribute("for", labelRef);
     label.appendChild(document.createTextNode(labelText));
 
-    let input = document.createElement("input");
+    const input = document.createElement("input");
     input.setAttribute("name", labelRef);
     input.setAttribute("type", "checkbox");
 
@@ -34,13 +72,13 @@ function createCheckboxInput(labelText, labelRef) {
 }
 
 function createTextboxInput(labelText, labelRef, placeholder) {
-    let div = document.createElement("div");
+    const div = document.createElement("div");
     
-    let label = document.createElement("label");
+    const label = document.createElement("label");
     label.setAttribute("for", labelRef);
     label.appendChild(document.createTextNode(labelText));
     
-    let input = document.createElement("input");
+    const input = document.createElement("input");
     input.setAttribute("name", labelRef);
     input.setAttribute("type", "text");
     if (placeholder != null)
@@ -53,19 +91,19 @@ function createTextboxInput(labelText, labelRef, placeholder) {
 }
 
 function createNumberInput(labelText, labelRef, placeholder) {
-    let div = document.createElement("div");
-    let [label, input] = createNumberUnit(labelText, labelRef, placeholder);
+    const div = document.createElement("div");
+    const [label, input] = createNumberUnit(labelText, labelRef, placeholder);
     div.appendChild(label);
     div.appendChild(input);
     return div;
 }
 
 function createNumberUnit(labelText, labelRef, placeholder) {
-    let label = document.createElement("label");
+    const label = document.createElement("label");
     label.setAttribute("for", labelRef);
     label.appendChild(document.createTextNode(labelText));
     
-    let input = document.createElement("input");
+    const input = document.createElement("input");
     input.setAttribute("name", labelRef);
     input.setAttribute("type", "number");
     if (placeholder != null)
@@ -74,17 +112,49 @@ function createNumberUnit(labelText, labelRef, placeholder) {
     return [label, input];
 }
 
+function createSelectInput(labelText, labelRef) {
+    const div = document.createElement("div");
+    
+    const label = document.createElement("label");
+    label.setAttribute("for", labelRef);
+    label.appendChild(document.createTextNode(labelText));
+    
+    const select = document.createElement("select");
+    select.setAttribute("name", labelRef);
+    select.setAttribute("type", "select");
+
+    div.appendChild(label);
+    div.appendChild(select);
+
+    return div;
+}
+
+function cloneSelectInput(selectQueryString) {
+    const selectorIn = document.querySelector(selectQueryString);
+    const divIn = selectorIn.parentElement;
+    const labelIn = divIn.querySelector("label");
+    const div = createSelectInput(
+        labelIn.textContent,
+        labelIn.getAttribute("for")
+    );
+    updateSelector(
+        div.querySelector("select"), 
+        getOptionsInSelector(selectorIn)
+    );
+    return div;
+}
+
 function createMapjsonPosition() {
-    let position = document.createElement("div");
-    let positionTitle = document.createElement("h3");
+    const position = document.createElement("div");
+    const positionTitle = document.createElement("h3");
     positionTitle.appendChild(document.createTextNode("Position"));
     position.appendChild(positionTitle);
 
-    let div = document.createElement("div");
+    const div = document.createElement("div");
     div.setAttribute("class", "grid");
-    let coordinates = [["x:", "x"], ["y:", "y"], ["z:", "z"]];
+    const coordinates = [["x:", "x"], ["y:", "y"], ["z:", "z"]];
     coordinates.forEach(el => {
-        let [label, input] = createNumberUnit(el[0], el[1]);
+        const [label, input] = createNumberUnit(el[0], el[1]);
         div.appendChild(label);
         div.appendChild(input);
     });
@@ -93,16 +163,16 @@ function createMapjsonPosition() {
 }
 
 function createMapjsonRotation() {
-    let position = document.createElement("div");
-    let positionTitle = document.createElement("h3");
+    const position = document.createElement("div");
+    const positionTitle = document.createElement("h3");
     positionTitle.appendChild(document.createTextNode("Rotation"));
     position.appendChild(positionTitle);
 
-    let div = document.createElement("div");
+    const div = document.createElement("div");
     div.setAttribute("class", "grid");
-    let coordinates = [["x:", "x"], ["y:", "y"], ["z:", "z"]];
+    const coordinates = [["x:", "x"], ["y:", "y"], ["z:", "z"]];
     coordinates.forEach(el => {
-        let [label, input] = createNumberUnit(el[0], el[1]);
+        const [label, input] = createNumberUnit(el[0], el[1]);
         div.appendChild(label);
         div.appendChild(input);
     });
@@ -111,16 +181,16 @@ function createMapjsonRotation() {
 }
 
 function createMapjsonColor() {
-    let color = document.createElement("div");
-    let colorTitle = document.createElement("h3");
+    const color = document.createElement("div");
+    const colorTitle = document.createElement("h3");
     colorTitle.appendChild(document.createTextNode("Color"));
     color.appendChild(colorTitle);
 
-    let div = document.createElement("div");
+    const div = document.createElement("div");
     div.setAttribute("class", "grid");
-    let channels = [["r:", "r"], ["g:", "g"], ["b:", "b"], ["a:", "a"]];
+    const channels = [["r:", "r"], ["g:", "g"], ["b:", "b"], ["a:", "a"]];
     channels.forEach(el => {
-        let [label, input] = createNumberUnit(el[0], el[1]);
+        const [label, input] = createNumberUnit(el[0], el[1]);
         div.appendChild(label);
         div.appendChild(input);
     });
@@ -130,16 +200,22 @@ function createMapjsonColor() {
 
 // Add mapjson light element
 function addNewLight() {
-    let light = document.createElement("div");
+    const light = document.createElement("div");
     light.setAttribute("class", "light");
 
-    let active = createCheckboxInput("Active", "active");
-    let objectname = createTextboxInput("Object name", "objectName");
-    let prefabname = createTextboxInput("Prefab name", "prefabName");
-    let position = createMapjsonPosition();
-    let rotation = createMapjsonRotation();
-    let color = createMapjsonColor();  
-    let intensity = createNumberInput("Intensity", "intensity");
+    const active = createCheckboxInput("Active", "active");
+    const objectname = createTextboxInput("Object name", "objectName");
+    const prefabSelect = document.querySelector("[name='prefabName']");
+    let prefabname;
+    if (prefabSelect == null) {
+        prefabname = createSelectInput("Prefab name", "prefabName");
+    } else {
+        prefabname = cloneSelectInput("[name='prefabName']");
+    }
+    const position = createMapjsonPosition();
+    const rotation = createMapjsonRotation();
+    const color = createMapjsonColor();  
+    const intensity = createNumberInput("Intensity", "intensity");
 
     light.appendChild(active);
     light.appendChild(objectname);
@@ -152,17 +228,61 @@ function addNewLight() {
     return light
 }
 
+function addNewObject() {
+    const obj = document.createElement("div");
+    obj.setAttribute("class", "object");
+
+    const active = createCheckboxInput("Active", "active");
+    const objectname = createTextboxInput("Object name", "objectName");
+    const prefabSelect = document.querySelector("[name='prefabName']");
+    let prefabname;
+    if (prefabSelect == null) {
+        prefabname = createSelectInput("Prefab name", "prefabName");
+    } else {
+        prefabname = cloneSelectInput("[name='prefabName']");
+    }
+    const position = createMapjsonPosition();
+    const rotation = createMapjsonRotation();
+
+    obj.appendChild(active);
+    obj.appendChild(objectname);
+    obj.appendChild(prefabname);
+    obj.appendChild(position);
+    obj.appendChild(rotation);
+
+    return obj
+}
+
 window.addEventListener('load', function(e) {
-    let btnAdd = document.getElementById("mapjsonAdd");
-    btnAdd.addEventListener('click', (e) => {
-        let lightContainer = document.getElementById("lights");
+    const btnAddLight = document.getElementById("mapjsonAddLight");
+    btnAddLight.addEventListener('click', (e) => {
+        const lightContainer = document.getElementById("lights");
         lightContainer.appendChild(addNewLight());
     });
-    btnAdd.click();
+    btnAddLight.click();
 
-    let btnDownload = document.getElementById("mapjsonDownload");
+    const btnAddObject = document.getElementById("mapjsonAddObject");
+    btnAddObject.addEventListener('click', (e) => {
+        const lightContainer = document.getElementById("objects");
+        lightContainer.appendChild(addNewObject());
+    });
+    btnAddObject.click();
+
+    const btnDownload = document.getElementById("mapjsonDownload");
     btnDownload.addEventListener('click', (e) => {
         download("map.json", JSON.stringify(demo, null, 4));
+    });
+
+    const btnImportPrefabs = document.querySelector("[name='importPrefabs']")
+    btnImportPrefabs.addEventListener('change', () => {
+        const file = btnImportPrefabs.files[0];
+        const reader = new FileReader();
+        reader.addEventListener('load', (e) => {
+            const json = e.target.result;
+            const data = JSON.parse(json);
+            updateSelectors("prefabName", data["prefabs"]);
+        });
+        reader.readAsText(file);
     });
 });
 

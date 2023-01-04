@@ -15,16 +15,28 @@ body {
     align-items: center;
 }
 
+body > h1 {
+    margin: 10px 10px 0px 10px;
+    padding: 10px;
+}
+
+body > h2 {
+    margin: 0;
+    padding: 0;
+    margin-bottom: 10px;
+}
+
 /* mapjson level */
 body > div {
-    width: 50%;
+    width: 94%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    align-items: left;
+    align-items: stretch;
     border: 1px solid rgb(24, 24, 24);
-    border-radius: 10px;
+    border-radius: 0px;
     padding: 10px 20px;
+    margin-bottom: 15px;
 }
 
 /* lights (container) level */
@@ -48,8 +60,8 @@ body > div > div > div {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border: 1px solid rgb(0, 0, 32);
-    border-radius: 10px;
+    border-bottom: 1px solid rgb(0, 0, 32);
+    border-radius: 0px;
 }
 
 /* light element section level: color container */
@@ -59,7 +71,7 @@ body > div > div > div > div {
     display: flex;
     flex-direction: column;
     justify-content: column;
-    align-items: left;
+    align-items: stretch;
     margin-bottom: 5px;
 }
 body > div > div > div > div:last-of-type {
@@ -72,7 +84,7 @@ body .bool {
     height: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: left;
+    justify-content: flex-start;
     align-items: center;
 }
 
@@ -89,7 +101,7 @@ body .grid > label {
 body .addElement {
     display: flex;
     flex-direction: row;
-    justify-content: left;
+    justify-content: flex-start;
     align-items: flex-start;
     border: none;
     padding: 0px;
