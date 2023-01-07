@@ -50,7 +50,7 @@ function updateSelector(selector, optionList) {
     });
 }
 
-function createCheckboxInput(labelText, labelRef) {
+function createCheckboxInput(labelText, labelRef, defaultValue) {
     const div = document.createElement("div");
     
     const booldiv = document.createElement("div");
@@ -63,6 +63,7 @@ function createCheckboxInput(labelText, labelRef) {
     const input = document.createElement("input");
     input.setAttribute("name", labelRef);
     input.setAttribute("type", "checkbox");
+    input.checked = defaultValue;
 
     booldiv.appendChild(label);
     booldiv.appendChild(input);
@@ -146,7 +147,7 @@ function cloneSelectInput(selectQueryString) {
 
 function createMapjsonPosition() {
     const position = document.createElement("div");
-    const positionTitle = document.createElement("h3");
+    const positionTitle = document.createElement("h4");
     positionTitle.appendChild(document.createTextNode("Position"));
     position.appendChild(positionTitle);
 
@@ -164,7 +165,7 @@ function createMapjsonPosition() {
 
 function createMapjsonRotation() {
     const position = document.createElement("div");
-    const positionTitle = document.createElement("h3");
+    const positionTitle = document.createElement("h4");
     positionTitle.appendChild(document.createTextNode("Rotation"));
     position.appendChild(positionTitle);
 
@@ -182,7 +183,7 @@ function createMapjsonRotation() {
 
 function createMapjsonColor() {
     const color = document.createElement("div");
-    const colorTitle = document.createElement("h3");
+    const colorTitle = document.createElement("h4");
     colorTitle.appendChild(document.createTextNode("Color"));
     color.appendChild(colorTitle);
 
@@ -203,7 +204,7 @@ function addNewLight() {
     const light = document.createElement("div");
     light.setAttribute("class", "light");
 
-    const active = createCheckboxInput("Active", "active");
+    const active = createCheckboxInput("Active", "active", true);
     const objectname = createTextboxInput("Object name", "objectName");
     const prefabSelect = document.querySelector("[name='prefabName']");
     let prefabname;
@@ -232,7 +233,7 @@ function addNewObject() {
     const obj = document.createElement("div");
     obj.setAttribute("class", "object");
 
-    const active = createCheckboxInput("Active", "active");
+    const active = createCheckboxInput("Active", "active", true);
     const objectname = createTextboxInput("Object name", "objectName");
     const prefabSelect = document.querySelector("[name='prefabName']");
     let prefabname;

@@ -26,6 +26,12 @@ body > h2 {
     margin-bottom: 10px;
 }
 
+h4 {
+    margin: 0px;
+    font-size: medium;
+    font-weight: normal;
+}
+
 /* mapjson level */
 body > div {
     width: 94%;
@@ -44,16 +50,27 @@ body > div > div {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     
     padding: 10px 20px;
     margin-bottom: 5px;
 }
 
+body .container-of-blocks {
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+body .container-of-blocks > h3 {
+    width: 100%;
+}
+
 /* light element level */
 body > div > div > div {
-    width: 100%;
-    height: 100%;
+    /* width: 100%;
+    height: 100%; */
     padding: 10px;
     margin: 5px;
     display: flex;
@@ -110,8 +127,3 @@ body .addElement button {
     margin-right: 5px;
 }
 
-h3 {
-    margin: 0px;
-    font-size: medium;
-    font-weight: normal;
-}
