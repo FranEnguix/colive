@@ -1,3 +1,10 @@
+function updateFlapSelectedClass(newSelectedElement) {
+    const selectedClass = "flap-selected";
+    const currentSelected = document.querySelector("."+selectedClass);
+    currentSelected.classList.remove(selectedClass);
+    newSelectedElement.classList.add(selectedClass);
+}
+
 // Example: download("test.json", JSON.stringify(obj, null, 4))
 function download(filename, text) {
     let element = document.createElement('a');
@@ -284,6 +291,13 @@ window.addEventListener('load', function(e) {
             updateSelectors("prefabName", data["prefabs"]);
         });
         reader.readAsText(file);
+    });
+
+    const flaps = document.querySelectorAll("#menu a");
+    flaps.forEach(flap => {
+        flap.addEventListener("click", e => {
+            updateFlapSelectedClass(e.target);
+        });
     });
 });
 

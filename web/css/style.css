@@ -21,9 +21,13 @@ body > h1 {
 }
 
 body > h2 {
-    margin: 0;
+    margin: 0px;
     padding: 0;
     margin-bottom: 10px;
+}
+
+div > h2 {
+    padding: 0px 10px;
 }
 
 h4 {
@@ -34,15 +38,25 @@ h4 {
 
 /* mapjson level */
 body > div {
-    width: 94%;
+    width: 98%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: stretch;
     border: 1px solid rgb(24, 24, 24);
     border-radius: 0px;
-    padding: 10px 20px;
+    box-sizing: border-box;
+    /* padding: 10px 20px; */
     margin-bottom: 15px;
+    /* margin: 0px 10px 15px 10px; */
+}
+
+
+body > div.config-container-of-blocks {
+    display: none;
+}
+body > div.selected-config-container {
+    display: flex;
 }
 
 /* lights (container) level */
@@ -54,6 +68,51 @@ body > div > div {
     
     padding: 10px 20px;
     margin-bottom: 5px;
+}
+
+body #menu {
+    display: flex;
+    flex-direction: row;
+    justify-content: stretch;
+    margin: 0;
+    border: none;
+}
+
+body #menu a {
+    background-color: azure;
+    transition: background-color 400ms;
+    transition-timing-function: ease-out;
+    flex: 1;
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+    text-decoration: none;
+    border: 1px solid black;
+    border-right: none;
+}
+
+body #menu a:last-of-type {
+    border-right: 1px solid black;
+}
+
+body #menu a:visited {
+    text-decoration: none;
+}
+
+body #menu a:hover {
+    background-color: blanchedalmond;
+}
+
+body #menu a:hover {
+    background-color: blanchedalmond;
+}
+
+body .config-container-of-blocks {
+    border-top: none;
+}
+
+#menu .flap-selected {
+    border-bottom: none;
 }
 
 body .container-of-blocks {
@@ -121,7 +180,7 @@ body .addElement {
     justify-content: flex-start;
     align-items: flex-start;
     border: none;
-    padding: 0px;
+    padding: 10px;
 }
 body .addElement button {
     margin-right: 5px;
