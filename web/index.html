@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>FIVE configurator</title>
     <link rel="stylesheet" href="./css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@300&family=Oxygen&family=Sofia+Sans:wght@200&display=swap" rel="stylesheet">
     <!-- <link rel="icon" href="./img/favicon.ico" type="image/x-icon"> -->
 	<script src="./js/script.js"></script>
   </head>
@@ -24,17 +25,32 @@
         </div>
     </div>
     <div id="menu">
-        <a class="agent flap-selected" href="#">Agents</a>
-        <a class="environment" href="#">Maps</a>
-        <a class="environment" href="#">Maps links</a>
-        <a class="environment" href="#">Environment & Elements</a>
+        <a class="agent flap-selected" href="#" data-link="configurationjson">Agents</a>
+        <a class="environment" href="#" data-link="maptxt">Maps</a>
+        <a class="environment" href="#" data-link="map_configjson">Map links</a>
+        <a class="environment" href="#" data-link="mapjson">Environment & Elements</a>
     </div>
-    <div id="configurationjson" class="config-container-of-blocks">
-
+    <div class="config-container-of-blocks selected-config-container" id="configurationjson">
+        <h2>configuration.json</h2>
+        <div class="container-of-blocks">
+            <h3>section</h3>
+        </div>
     </div>
-    <div id="mapjson" class="config-container-of-blocks selected-config-container">
+    <div class="config-container-of-blocks" id="maptxt">
+        <h2>map.txt</h2>
+        <div class="container-of-blocks">
+            <h3>section</h3>
+        </div>
+    </div>
+    <div class="config-container-of-blocks" id="map_configjson">
+        <h2>map_config.json</h2>
+        <div class="container-of-blocks">
+            <h3>section</h3>
+        </div>
+    </div>
+    <div class="config-container-of-blocks"  id="mapjson">
         <h2>map.json</h2>
-        <div id="lights" class="container-of-blocks">
+        <div class="container-of-blocks" id="lights">
             <h3>lights</h3>
             <!-- <div class="light">
                 <div>

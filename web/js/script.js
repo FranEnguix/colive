@@ -1,8 +1,15 @@
 function updateFlapSelectedClass(newSelectedElement) {
-    const selectedClass = "flap-selected";
-    const currentSelected = document.querySelector("."+selectedClass);
-    currentSelected.classList.remove(selectedClass);
-    newSelectedElement.classList.add(selectedClass);
+    const selectedFlapClass = "flap-selected";
+    const currentFlapSelected = document.querySelector("."+selectedFlapClass);
+    currentFlapSelected.classList.remove(selectedFlapClass);
+    newSelectedElement.classList.add(selectedFlapClass);
+
+    const selectedContainerClass = "selected-config-container";
+    const data_link = newSelectedElement.getAttribute("data-link");
+    const newSelectedContainer = document.getElementById(data_link);
+    const currentContainerSelected = document.querySelector("."+selectedContainerClass);
+    currentContainerSelected.classList.remove(selectedContainerClass);
+    newSelectedContainer.classList.add(selectedContainerClass);
 }
 
 // Example: download("test.json", JSON.stringify(obj, null, 4))
@@ -296,7 +303,8 @@ window.addEventListener('load', function(e) {
     const flaps = document.querySelectorAll("#menu a");
     flaps.forEach(flap => {
         flap.addEventListener("click", e => {
-            updateFlapSelectedClass(e.target);
+            const elementClicked = e.target;
+            updateFlapSelectedClass(elementClicked);
         });
     });
 });
