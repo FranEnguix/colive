@@ -1,3 +1,17 @@
+function linkImportLabelsToButtons(containerElement) {
+    const labels = containerElement.querySelectorAll("label");
+    labels.forEach(label => {
+        // const input = containerElement.querySelector(`input[name='${labelFor}']`);
+        label.addEventListener("click", (e) => {
+            const lbl = e.target;
+            const labelFor = lbl.getAttribute("for");
+            const parent = lbl.parentElement;
+            const inputFile = parent.querySelector(`input[name='${labelFor}']`)
+            inputFile.click();
+        });
+    });
+}
+
 function updateFlapSelectedClass(newSelectedElement) {
     const selectedFlapClass = "flap-selected";
     const currentFlapSelected = document.querySelector("."+selectedFlapClass);
@@ -79,8 +93,8 @@ function createCheckboxInput(labelText, labelRef, defaultValue) {
     input.setAttribute("type", "checkbox");
     input.checked = defaultValue;
 
-    booldiv.appendChild(label);
     booldiv.appendChild(input);
+    booldiv.appendChild(label);
     div.appendChild(booldiv);
 
     return div;
@@ -213,6 +227,37 @@ function createMapjsonColor() {
     return color;
 }
 
+function addNewAgent() {
+    const agent = document.createElement("div");
+    agent.setAttribute("class", "agent");
+
+    const agentname = createTextboxInput("Agent name", "agentName");
+    const at = createTextboxInput("At (XMPP Address)", "at");
+    const password = createTextboxInput("Password", "password");
+    const imageCapacitySize = createNumberInput("Folder capacity size", "folderCapacitySize");
+    const imageFolderName = createTextboxInput("Image folder name", "imageFolderName");
+    const agentCollision = createCheckboxInput("Collision between agents", "agentCollision");
+    const prefabSelect = document.querySelector("[name='prefabName']");
+    let prefabname;
+    if (prefabSelect == null) {
+        prefabname = createSelectInput("Prefab name", "prefabName");
+    } else {
+        prefabname = cloneSelectInput("[name='prefabName']");
+    }
+    const position = createMapjsonPosition();
+    
+    agent.appendChild(agentname);
+    agent.appendChild(at);
+    agent.appendChild(password);
+    agent.appendChild(imageFolderName);
+    agent.appendChild(imageCapacitySize);
+    agent.appendChild(agentCollision);
+    agent.appendChild(prefabname);
+    agent.appendChild(position);
+    
+    return agent
+}
+
 // Add mapjson light element
 function addNewLight() {
     const light = document.createElement("div");
@@ -269,6 +314,13 @@ function addNewObject() {
 }
 
 window.addEventListener('load', function(e) {
+    const btnAddAgent = document.getElementById("configurationjsonAddAgent");
+    btnAddAgent.addEventListener('click', (e) => {
+        const container = document.getElementById("agents");
+        container.appendChild(addNewAgent());
+    });
+    btnAddAgent.click();
+
     const btnAddLight = document.getElementById("mapjsonAddLight");
     btnAddLight.addEventListener('click', (e) => {
         const lightContainer = document.getElementById("lights");
@@ -302,11 +354,13 @@ window.addEventListener('load', function(e) {
 
     const flaps = document.querySelectorAll("#menu a");
     flaps.forEach(flap => {
-        flap.addEventListener("click", e => {
+        flap.addEventListener("click", (e) => {
             const elementClicked = e.target;
             updateFlapSelectedClass(elementClicked);
         });
     });
+
+    linkImportLabelsToButtons(document.getElementById("import-menu"));    
 });
 
 

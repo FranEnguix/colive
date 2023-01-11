@@ -12,42 +12,55 @@
   </head>
   <body>
     <h1>FIVE</h1>
+
     <h2>Configurator</h2>
+
     <div id="import-menu">
         <h2>Import menu</h2>
         <div>
             <div>
                 <div>
                     <label for="importPrefabs">Prefab list</label>
-                    <input name="importPrefabs" type="file" accept=".json">
+                    <div data-link="importPrefabs">
+                        <input name="importPrefabs" type="file" accept=".json">
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
     <div id="menu">
         <a class="agent flap-selected" href="#" data-link="configurationjson">Agents</a>
         <a class="environment" href="#" data-link="maptxt">Maps</a>
         <a class="environment" href="#" data-link="map_configjson">Map links</a>
         <a class="environment" href="#" data-link="mapjson">Environment & Elements</a>
     </div>
+
     <div class="config-container-of-blocks selected-config-container" id="configurationjson">
         <h2>configuration.json</h2>
-        <div class="container-of-blocks">
-            <h3>section</h3>
+        <div id="agents" class="container-of-blocks">
+            <h3>agents</h3> 
+        </div>
+        <div class="addElement">
+            <button id="configurationjsonAddAgent">Add Agent</button>
+            <button id="configurationjsonDownload">Download</button>
         </div>
     </div>
+
     <div class="config-container-of-blocks" id="maptxt">
         <h2>map.txt</h2>
         <div class="container-of-blocks">
             <h3>section</h3>
         </div>
     </div>
+
     <div class="config-container-of-blocks" id="map_configjson">
         <h2>map_config.json</h2>
         <div class="container-of-blocks">
             <h3>section</h3>
         </div>
     </div>
+
     <div class="config-container-of-blocks"  id="mapjson">
         <h2>map.json</h2>
         <div class="container-of-blocks" id="lights">
@@ -77,8 +90,7 @@
             </div> -->
         </div>
         <div id="objects" class="container-of-blocks">
-            <h3>objects</h3>
-            
+            <h3>objects</h3> 
         </div>
         <div class="addElement">
             <button id="mapjsonAddLight">Add Light</button>
@@ -86,5 +98,9 @@
             <button id="mapjsonDownload">Download</button>
         </div>
     </div>
+
+    <footer>
+        <span>Copyright © 2022-2023 Francisco Enguix Andrés</span>
+    </footer>
   </body>
 </html>
