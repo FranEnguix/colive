@@ -2,12 +2,23 @@ function linkImportLabelsToButtons(containerElement) {
     const labels = containerElement.querySelectorAll("label");
     labels.forEach(label => {
         // const input = containerElement.querySelector(`input[name='${labelFor}']`);
-        label.addEventListener("click", (e) => {
-            const lbl = e.target;
-            const labelFor = lbl.getAttribute("for");
-            const parent = lbl.parentElement;
-            const inputFile = parent.querySelector(`input[name='${labelFor}']`)
-            inputFile.click();
+        // label.addEventListener("click", (e) => {
+        //     const lbl = e.target;
+        //     const labelFor = lbl.getAttribute("for");
+        //     const parent = lbl.parentElement;
+        //     const inputFile = parent.querySelector(`input[name='${labelFor}']`);
+        //     inputFile.click();
+        // });
+        const labelParent = label.parentElement;
+        const labelFor = label.getAttribute("for");
+        const div = labelParent.querySelector(`div[data-link='${labelFor}']`);
+        div.addEventListener("click", (e) => {
+            const d = e.target;
+            const labelFor = d.getAttribute("data-link");
+            if (labelFor != null) {
+                const inputFile = d.querySelector(`input[name='${labelFor}']`);
+                inputFile.click();
+            }
         });
     });
 }

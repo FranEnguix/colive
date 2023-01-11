@@ -122,15 +122,16 @@ body #import-menu input[type='file'] {
     display: none;
 }
 
-body #import-menu label {
+body #import-menu div[data-link] {
     background-color: #7A738A;
     display: inline-block;
     border: 1px solid #15001829;
     border-radius: 15px;
     padding: 10px 25px;
+    cursor: pointer;
 }
 
-body #import-menu label:hover {
+body #import-menu div[data-link]:hover {
     background-color: #817A91;
 }
 
@@ -311,6 +312,7 @@ body .addElement button {
     padding: 1em;
     border-radius: 15px;
     border: #00181479;
+    cursor: pointer;
 }
 body .addElement button:hover {
     background-color: #08947D;
