@@ -31,7 +31,7 @@ public class XmppCommunicator
             XData = new Data(FormType.Form),
             Type = Matrix.Xmpp.MessageType.Chat
         };
-        Field metadata = new Field("simulator", fieldValue) {
+        Field metadata = new Field("five", fieldValue) {
             Type = FieldType.TextSingle
         };
         message.XData.AddField(metadata);

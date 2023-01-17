@@ -23,13 +23,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="commander.py" />
+    <Compile Include="custom_typings.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="entity.py" />
     <Compile Include="entity_behaviour.py" />
     <Compile Include="entity_shell.py" />
     <Compile Include="entity_state.py" />
     <Compile Include="image_data.py" />
-    <Compile Include="image_behaviour.py" />
-    <Compile Include="image_manager.py" />
     <Compile Include="launcher.py" />
   </ItemGroup>
   <ItemGroup>
@@ -37,24 +38,6 @@
       <Id>five</Id>
       <Version>3.9</Version>
       <Description>five (Python 3.9 (64-bit))</Description>
-      <InterpreterPath>Scripts\python.exe</InterpreterPath>
-      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
-      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
-      <Architecture>X64</Architecture>
-    </Interpreter>
-    <Interpreter Include="..\..\envs\sasamas\">
-      <Id>sasamas</Id>
-      <Version>3.9</Version>
-      <Description>sasamas (Python 3.9 (64-bit))</Description>
-      <InterpreterPath>Scripts\python.exe</InterpreterPath>
-      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
-      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
-      <Architecture>X64</Architecture>
-    </Interpreter>
-    <Interpreter Include="env\">
-      <Id>env</Id>
-      <Version>3.7</Version>
-      <Description>env (Python 3.7 (64-bit))</Description>
       <InterpreterPath>Scripts\python.exe</InterpreterPath>
       <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>

@@ -153,8 +153,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edb8f1d060c98ac429d3d38d6cd82d0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xmppName: simulator
-  xmppPass: sasamas
+  xmppName: fiveserver
+  xmppPass: fiveserver
   xmppDomain: localhost
   xmppHostnameResolver: 127.0.0.1
   mapLoader: {fileID: 1877139294}
@@ -183,7 +183,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 240953867}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 062f5853bc2ca7041bb1f59f2a85f4c6, type: 3}
   m_Name: 

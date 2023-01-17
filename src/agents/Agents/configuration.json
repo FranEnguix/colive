@@ -1,15 +1,14 @@
 {
-    "simulator": {
-        "address": "127.0.0.1",
-        "commandPort": 6066,
-        "imagePort": 6067
+    "fiveserver": {
+        "name": "fiveserver",
+        "at": "localhost"
     },
     "agents": [
         {
             "name": "agente1",
             "at": "localhost",
             "password": "xmppserver",
-            "imageBufferSize": 80,
+            "folderCapacitySize": 80,
             "imageFolderName": "captures",
             "enableAgentCollision": true,
             "prefabName": "Tractor",

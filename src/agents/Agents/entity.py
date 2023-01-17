@@ -4,6 +4,8 @@ import socket
 import sys
 import time
 
+from dataclasses import dataclass
+
 from queue import LifoQueue 
 
 from spade.agent import Agent
@@ -16,17 +18,15 @@ from entity_state import StateInit, StatePerception, StateCognition, StateAction
 from commander import Axis
 
 class EntityAgent(Agent):
-    def __init__(self, name_at: str, password: str, command_socket_info: tuple, image_socket_info: tuple, image_buffer_size: int, image_folder_name: str, enable_agent_collision: bool, prefab_name: str, starter_position: dict):
+    # TODO: dataclass
+    def __init__(self, name_at: str, password: str, folder_capacity_size: int, image_folder_name: str, enable_agent_collision: bool, prefab_name: str, starter_position: dict, fiveserver_jit: str):
         Agent.__init__(self, name_at, password)
-        self.command_socket_info = command_socket_info
-        self.image_socket_info = image_socket_info
-        self.image_buffer_size = image_buffer_size
+        self.folder_capacity_size = folder_capacity_size
         self.image_folder_name = image_folder_name
         self.agent_collision = enable_agent_collision
         self.prefab_name = prefab_name
         self.starter_position = starter_position
-        self.__server_jit = "simulator@localhost"
-        self.camera = True
+        self.__server_jit = fiveserver_jit
 
     async def setup(self):
         fsm_behaviour = AgentBehaviour()
@@ -45,31 +45,26 @@ class EntityAgent(Agent):
         
         # MESSAGE TEMPLATE
         fsm_template = Template()
-        fsm_template.set_metadata("simulator", "command")
+        fsm_template.set_metadata("five", "command")
 
         # ADD BEHAVIOUR
         self.add_behaviour(fsm_behaviour, fsm_template)
         print(f"{self.name}: FSM behaviour is ready.")
 
-        # ADD IMAGE BEHAVIOUR IF AGENT'S AVATAR HAS A CAMERA
-        if self.camera:
-            image_behaviour = AgentImageBehaviour()
-            image_template = Template()
-            image_template.set_metadata("simulator", "image")
-            self.image_queue = LifoQueue()
-            self.add_behaviour(image_behaviour, image_template)
+        # ADD IMAGE BEHAVIOUR
+        image_template = Template()
+        image_template.set_metadata("five", "image")
+        self.image_queue = LifoQueue()
+        self.add_behaviour(AgentImageBehaviour(), image_template)
 
 
     async def send_msg_to_server_and_wait(self, msg:str) -> str:
         """
         Send a message and waits for a response
         """
-        # encoded_msg = (msg).encode()
-        # self.__command_socket.sendall(bytearray(encoded_msg))
-        # return self.__command_socket.recv(128)
         message = Message(to=self.__server_jit)
         message.body = msg
-        message.set_metadata("simulator", "command")
+        message.set_metadata("five", "command")
         await self.behaviours[0].send(message)
         reply = await self.behaviours[0].receive(sys.float_info.max)
         if reply:
@@ -80,9 +75,6 @@ class EntityAgent(Agent):
         """
         Send a command and waits for a response
         """
-        # encoded_msg = json.dumps(msg).encode()
-        # self.__command_socket.sendall(bytearray(encoded_msg))
-        # return self.__command_socket.recv(128)
         await self.send_command_to_server(msg)
         reply = await self.behaviours[0].receive(sys.float_info.max)
         if reply:
@@ -94,12 +86,10 @@ class EntityAgent(Agent):
         """
         Send a command 
         """
-        # encoded_msg = json.dumps(msg).encode()
-        # self.__command_socket.sendall(bytearray(encoded_msg))
         encoded_msg = json.dumps(msg)
         message = Message(to=self.__server_jit)
         message.body = encoded_msg
-        message.set_metadata("simulator", "command")
+        message.set_metadata("five", "command")
         await self.behaviours[0].send(message)
 
 

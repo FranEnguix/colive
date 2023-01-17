@@ -16,8 +16,8 @@ using UnityEngine;
 
 public class XmppCommunicationManager : MonoBehaviour
 {
-	[SerializeField] private string xmppName = "simulator";
-	[SerializeField] private string xmppPass = "sasamas";
+	[SerializeField] private string xmppName = "fiveserver";
+	[SerializeField] private string xmppPass = "fiveserver";
 	[SerializeField] private string xmppDomain = "localhost";
 	[SerializeField] private string xmppHostnameResolver = "127.0.0.1";
 
@@ -59,7 +59,7 @@ public class XmppCommunicationManager : MonoBehaviour
             Tls = false
         };
         await xmppClient.ConnectAsync();
-        await xmppClient.SendPresenceAsync(Show.Chat, "simulator awake");
+        await xmppClient.SendPresenceAsync(Show.Chat, "five server awake");
     }
 
     private void SetupXmppHandlers() {
@@ -71,7 +71,7 @@ public class XmppCommunicationManager : MonoBehaviour
             if (el is Message message && message.XData.Fields.Length > 0) {
                 Field metadata = message.XData.Fields[0];
                 bool command = metadata.Values.Length > 0 && metadata.Values[0].Equals("command");
-                return metadata.Var.Equals("simulator") && command;
+                return metadata.Var.Equals("five") && command;
             }
             return false;
         }).Subscribe(el => {

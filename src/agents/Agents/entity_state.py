@@ -3,7 +3,6 @@ import os
 from queue import LifoQueue 
 from datetime import datetime
 
-import image_manager
 from image_data import ImageData
 from entity_shell import EntityShell
 from spade.behaviour import State
@@ -52,13 +51,13 @@ class StatePerception(State):
 
     def save_images(self):
         data = None
-        if (self.agent.camera and not self.agent.image_queue.empty()):
+        if (not self.agent.image_queue.empty()):
             data = self.agent.image_queue.get()
             self.agent.image_counter += 1
-            if (self.agent.image_buffer_size > 0):
+            if (self.agent.folder_capacity_size > 0):
                 if (not os.path.isdir(self.agent.image_folder_name)):
                     os.makedirs(self.agent.image_folder_name)
-                self.agent.image_counter = self.agent.image_counter % (self.agent.image_buffer_size + 1)
+                self.agent.image_counter = self.agent.image_counter % (self.agent.folder_capacity_size + 1)
                 if self.agent.image_counter == 0:
                     self.agent.image_counter = 1
                 image_filename = f"{self.agent.name}_{data.camera_index}_{self.agent.image_counter}.jpg"

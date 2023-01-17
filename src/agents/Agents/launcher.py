@@ -6,15 +6,23 @@ from entity import EntityAgent
 from queue import Queue
 from threading import Thread
 
-def create_default_config_file(filename:str) -> dict:
+from custom_typings import Config
+
+
+def create_default_config_file(filename: str) -> dict[Config]:
+    # TODO: replace string for code
     json_string = """
     {
+        "fiveserver": {
+            "name": "fiveserver",
+            "at": "localhost"
+        },
         "agents": [
             {
                 "name": "agente1",
                 "at": "localhost",
                 "password": "xmppserver",
-                "imageBufferSize": 3,
+                "folderCapacitySize": 3,
                 "imageFolderName": "captures",
                 "enableAgentCollision": true,
                 "prefabName": "Tractor",
@@ -28,7 +36,7 @@ def create_default_config_file(filename:str) -> dict:
                 "name": "agente2",
                 "at": "localhost",
                 "password": "xmppserver",
-                "imageBufferSize": 3,
+                "folderCapacitySize": 3,
                 "imageFolderName": "captures",
                 "enableAgentCollision": true,
                 "prefabName": "Tractor",
@@ -49,12 +57,6 @@ def write_json_file(filename:str, json_object:dict):
     with open(filename, "w") as config_file:
         json.dump(json_object, config_file, indent=4)
 
-def load_config(filename:str) -> dict:
-    if os.path.isfile(filename):
-        return read_json_file(filename)
-    else:
-        return create_default_config_file(filename)
-
 def setup_thread_agents(agents:list, simulator:dict, threads:list):
     entities = Queue() 
     for agent in agents:
@@ -65,19 +67,16 @@ def setup_thread_agents(agents:list, simulator:dict, threads:list):
         t.start()
     return list(entities.queue)
 
-def launch_agent(agent:dict, config:dict, entities:Queue):
-    command_socket_info = (config['address'], config['commandPort'])
-    image_socket_info = (config['address'], config['imagePort'])
+def launch_agent(agent:dict, fiveserver:dict, entities:Queue):
     entity = EntityAgent(
-        f"{agent['name']}@{agent['at']}", 
-        agent['password'],
-        command_socket_info,
-        image_socket_info,
-        agent['imageBufferSize'],
-        agent['imageFolderName'],
-        agent['enableAgentCollision'],
-        agent['prefabName'],
-        agent['position'],
+        name_at = f"{agent['name']}@{agent['at']}", 
+        password = agent['password'],
+        folder_capacity_size = agent['folderCapacitySize'],
+        image_folder_name = agent['imageFolderName'],
+        enable_agent_collision = agent['enableAgentCollision'],
+        prefab_name = agent['prefabName'],
+        starter_position = agent['position'],
+        fiveserver_jit = f"{fiveserver['name']}@{fiveserver['at']}"
     )
     future = entity.start()
     future.result()
@@ -93,17 +92,25 @@ def wait_for_agents(entities:list):
             alive = False
         time.sleep(1)
 
-if __name__ == "__main__":
-    configuration = load_config("configuration.json")
-    simulator_config = configuration['simulator']
-    agents_config = configuration['agents']
+def main():
+    configuration_filename = "configuration.json"
+    if os.path.isfile(configuration_filename):
+        configuration = read_json_file(configuration_filename)
+        fiveserver_config = configuration["fiveserver"]
+        agents_config = configuration["agents"]
+        threads = []
+        entities = setup_thread_agents(agents_config, fiveserver_config, threads)
+        try:
+            wait_for_agents(entities)
+        except KeyboardInterrupt:
+            for entity in entities:
+                entity.stop()
+        for thread in threads:
+            thread.join()
+    else:
+        default_config = create_default_config_file(filename)
+        if (default_config):
+            print(f"{configuration_filename} was not present and it is now created with a default configuration.")
 
-    threads = []
-    entities = setup_thread_agents(agents_config, simulator_config, threads)
-    try:
-        wait_for_agents(entities)
-    except KeyboardInterrupt:
-        for entity in entities:
-            entity.stop()
-    for thread in threads:
-        thread.join()
+if __name__ == "__main__":
+    main()
