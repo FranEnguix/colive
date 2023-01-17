@@ -9,12 +9,6 @@ from threading import Thread
 def create_default_config_file(filename:str) -> dict:
     json_string = """
     {
-        "simulator":
-        {
-            "address": "127.0.0.1",
-            "commandPort": 6066,
-            "imagePort": 6067
-        },
         "agents": [
             {
                 "name": "agente1",

@@ -11,7 +11,7 @@
     <OutputPath>.</OutputPath>
     <Name>Agents</Name>
     <RootNamespace>Agents</RootNamespace>
-    <InterpreterId>MSBuild|env|$(MSBuildProjectFullPath)</InterpreterId>
+    <InterpreterId>MSBuild|five|$(MSBuildProjectFullPath)</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,6 +33,15 @@
     <Compile Include="launcher.py" />
   </ItemGroup>
   <ItemGroup>
+    <Interpreter Include="..\..\..\..\Py\envs\five\">
+      <Id>five</Id>
+      <Version>3.9</Version>
+      <Description>five (Python 3.9 (64-bit))</Description>
+      <InterpreterPath>Scripts\python.exe</InterpreterPath>
+      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
+      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
+      <Architecture>X64</Architecture>
+    </Interpreter>
     <Interpreter Include="..\..\envs\sasamas\">
       <Id>sasamas</Id>
       <Version>3.9</Version>
