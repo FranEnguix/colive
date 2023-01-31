@@ -27,7 +27,7 @@ We can define the agents of our simulation, and the IVE features and objects pla
 You have to configure **map.txt**, **map_config.json** and **map.json** files.
 - **map.txt** lets you design an environment map by writing ASCII characters.
 - **map_config.json** is used to create a link between the characters of the **map.txt** to the object of the environment. For example, you may want to create a forest with certain distribution of trees, so you can write a 'T' character in **map.txt** and then create a link with the Unity object (prefab) in **map_config.json**.
-- **map.json** it is used to instantiate highly customized individual objects and light conditions. For example, you can define an empty object and name it "Spawner 2" and assign a position to it; then, you can reference this name to set it as the starting point of the agents in **configuration.json** file. 
+- **map.json** it is used to instantiate highly customized individual objects and light conditions. For example, you can define an empty object and name it "Agent spawner" and assign a position to it; then, you can reference this empty object by its name in **configuration.json** file and set it as the starting point of the agents. 
 
 ### FIVE Agents
 Agents only require one configuration file, which is named **configuration.json**. This file has two sections:
@@ -35,5 +35,12 @@ Agents only require one configuration file, which is named **configuration.json*
 - **agents** is a list of agents so we can set the agent name, avatar, starting position, etc. 
 
 The file that contains the code of the agent is **entity_shell.py**. We have to place the code of the agents here, and agents will share the same behaviour. In order to have different agents with differents behaviours, we have to clone the agents' python files and run it with modified versions of **entity_shell.py** and **configuration.json** files. We have planned a simplified version in the future, so we will only need to set the name of the file that contains the code of the agent in **configuration.json**.
+
+### Run FIVE
+
+To run the IVE with the inhabitant agents you have to:
+1. Run the XMPP server.
+2. Run the FIVE server (Unity).
+3. Run the agents by executing the **launcher.py** file.
 
 ![Orange orchard IVE inside vision](examples/pictures/orange_orchard_field_2.png)

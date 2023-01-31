@@ -17,9 +17,10 @@ using UnityEngine;
 public class XmppCommunicationManager : MonoBehaviour
 {
 	[SerializeField] private string xmppName = "fiveserver";
-	[SerializeField] private string xmppPass = "fiveserver";
 	[SerializeField] private string xmppDomain = "localhost";
+	[SerializeField] private string xmppPass = "fiveserver";
 	[SerializeField] private string xmppHostnameResolver = "127.0.0.1";
+    [SerializeField] private int xmppPort = 5222;
 
     [SerializeField] private GameObject mapLoader;
     [SerializeField] private GameObject[] agentsPrefabs;
@@ -30,6 +31,7 @@ public class XmppCommunicationManager : MonoBehaviour
     private XmppClient xmppClient;
 
     private void Awake() {
+        LoadPlayerPrefs();
         entities = new Dictionary<string, GameObject>();
         spawners = new Dictionary<string, GameObject>();
         commandQueue = new ConcurrentQueue<ICommand>();
@@ -49,17 +51,31 @@ public class XmppCommunicationManager : MonoBehaviour
         xmppClient.DisconnectAsync();
     }
 
+    private void LoadPlayerPrefs() {
+        if (PlayerPrefs.HasKey("xmppName"))
+            xmppName = PlayerPrefs.GetString("xmppName");
+        if (PlayerPrefs.HasKey("xmppDomain"))
+            xmppDomain = PlayerPrefs.GetString("xmppDomain");
+        if (PlayerPrefs.HasKey("xmppPass"))
+            xmppPass = PlayerPrefs.GetString("xmppPass");
+        if (PlayerPrefs.HasKey("xmppIpAddress"))
+            xmppHostnameResolver = PlayerPrefs.GetString("xmppIpAddress");
+        if (PlayerPrefs.HasKey("xmppPort"))
+            xmppPort = PlayerPrefs.GetInt("xmppPort");
+    }
+
     private async void ConnectToXmppServerAsync() {
         xmppClient = new XmppClient {
             Username = xmppName,
-            Password = xmppPass,
             XmppDomain = xmppDomain,
+            Password = xmppPass,
             HostnameResolver = new StaticNameResolver(xmppHostnameResolver),
+            Port = xmppPort,
             CertificateValidator = new AlwaysAcceptCertificateValidator(),
             Tls = false
         };
         await xmppClient.ConnectAsync();
-        await xmppClient.SendPresenceAsync(Show.Chat, "five server awake");
+        await xmppClient.SendPresenceAsync(Show.Chat, "fiveserver");
     }
 
     private void SetupXmppHandlers() {

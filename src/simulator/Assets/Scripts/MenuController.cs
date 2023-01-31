@@ -8,6 +8,11 @@ using UnityEngine.UI;
 
 public class MenuController : MonoBehaviour
 {
+    public TMP_InputField xmppName;
+    public TMP_InputField xmppDomain;
+    public TMP_InputField xmppPass;
+    public TMP_InputField xmppIpAddress;
+    public TMP_InputField xmppPort;
     public TMP_InputField ipAddress;
     public TMP_InputField commandPort;
     public TMP_InputField imagePort;
@@ -54,8 +59,7 @@ public class MenuController : MonoBehaviour
 
     private void Update() {
         bool errors = false;
-        errors |= CheckPortText(commandPort);
-        errors |= CheckPortText(imagePort);
+        errors |= CheckPortText(xmppPort);
         UpdateSaveButton(errors);
     }
 
@@ -120,12 +124,16 @@ public class MenuController : MonoBehaviour
     }
 
     public void PopulateFromPlayerPrefs() {
-        if (PlayerPrefs.HasKey("ipAddress"))
-            ipAddress.text = PlayerPrefs.GetString("ipAddress");
-        if (PlayerPrefs.HasKey("commandPort"))
-            commandPort.text = PlayerPrefs.GetInt("commandPort").ToString();
-        if (PlayerPrefs.HasKey("imagePort"))
-            imagePort.text = PlayerPrefs.GetInt("imagePort").ToString();
+        if (PlayerPrefs.HasKey("xmppName"))
+            xmppName.text = PlayerPrefs.GetString("xmppName");
+        if (PlayerPrefs.HasKey("xmppDomain"))
+            xmppDomain.text = PlayerPrefs.GetString("xmppDomain");
+        if (PlayerPrefs.HasKey("xmppPass"))
+            xmppPass.text = PlayerPrefs.GetString("xmppPass");
+        if (PlayerPrefs.HasKey("xmppIpAddress"))
+            xmppIpAddress.text = PlayerPrefs.GetString("xmppIpAddress");
+        if (PlayerPrefs.HasKey("xmppPort"))
+            xmppPort.text = PlayerPrefs.GetInt("xmppPort").ToString();
         if (PlayerPrefs.HasKey("resolution"))
             resolution.value = PlayerPrefs.GetInt("resolution");
         if (PlayerPrefs.HasKey("fullscreen"))
@@ -133,9 +141,11 @@ public class MenuController : MonoBehaviour
     }
 
     public void SavePlayerPrefs() {
-        PlayerPrefs.SetString("ipAddress", ipAddress.text);
-        PlayerPrefs.SetInt("commandPort", int.Parse(commandPort.text));
-        PlayerPrefs.SetInt("imagePort", int.Parse(imagePort.text));
+        PlayerPrefs.SetString("xmppName", xmppName.text);
+        PlayerPrefs.SetString("xmppDomain", xmppDomain.text);
+        PlayerPrefs.SetString("xmppPass", xmppPass.text);
+        PlayerPrefs.SetString("xmppIpAddress", xmppIpAddress.text);
+        PlayerPrefs.SetInt("xmppPort", int.Parse(xmppPort.text));
         PlayerPrefs.SetInt("resolution", resolution.value);
         PlayerPrefs.SetInt("fullscreen", Convert.ToInt32(fullscreen.isOn));
         PlayerPrefs.Save();
