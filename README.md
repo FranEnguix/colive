@@ -15,7 +15,7 @@ The SPADE agents require to clone the [src/agents](src/agents/) folder and insta
 
 `
 pip install spade
-`
+`	
 
 
 ## Usage
