@@ -149,7 +149,7 @@ public class TcpServer : MonoBehaviour
 
     private void SendPositionOfAvatarAgent(GameObject agent) {
         var entityComponent = agent.GetComponent<Entity>();
-        entityComponent.SendPositionAsync(agent.transform.position);
+        entityComponent.SendPosition(agent.transform.position);
     }
 
 	private void LaunchListenerCommandThread() {

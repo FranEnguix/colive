@@ -61,7 +61,7 @@ public class Entity : MonoBehaviour
         if (goalSet && navMeshAgent.remainingDistance <= distanceTargetThreshold) {
             if (Vector3.SqrMagnitude(navMeshAgent.destination - transform.position) <= distanceTargetThreshold) {
                 goalSet = false;
-                SendPositionAsync(navMeshAgent.destination);
+                SendPosition(navMeshAgent.destination);
             }
         }
     }
@@ -72,7 +72,9 @@ public class Entity : MonoBehaviour
             if (Vector3.Distance(transform.position, stuckPosition) < stuckDistanceThreshold) {
                 goalSet = false;
                 navMeshAgent.destination = transform.position;
-                SendPositionAsync(transform.position);
+                SendPosition(transform.position);
+                // var task = SendPositionAsync(transform.position);
+                //task.Wait();
             }
             stuckTimer = 0;
             stuckPosition = transform.position;
@@ -113,13 +115,15 @@ public class Entity : MonoBehaviour
         }
     }
 
-    public async Task SendCurrentPositionAsync() {
-        await SendPositionAsync(transform.position);
+    public void SendCurrentPosition() {
+        SendPosition(transform.position);
     }
 
-	public async Task SendPositionAsync(Vector3 point) {
+	public void SendPosition(Vector3 point) {
         string position = Vector3ToPosition(point);
-        await XmppCommunicator.SendXmppCommand(xmppClient, name, xmppClient.XmppDomain, position);
+        string name = this.name;
+        var task = Task.Run(async () => await XmppCommunicator.SendXmppCommand(xmppClient, name, xmppClient.XmppDomain, position));
+        task.Wait();
         Debug.Log(position);
         // tcpCommandManager.SendMessageToClient(position);
     }

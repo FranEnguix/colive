@@ -19,14 +19,14 @@ from commander import Axis
 
 class EntityAgent(Agent):
     # TODO: dataclass
-    def __init__(self, name_at: str, password: str, folder_capacity_size: int, image_folder_name: str, enable_agent_collision: bool, prefab_name: str, starter_position: dict, fiveserver_jit: str):
-        Agent.__init__(self, name_at, password)
+    def __init__(self, agent_jid: str, password: str, folder_capacity_size: int, image_folder_name: str, enable_agent_collision: bool, prefab_name: str, starter_position: dict, fiveserver_jid: str):
+        Agent.__init__(self, agent_jid, password)
         self.folder_capacity_size = folder_capacity_size
         self.image_folder_name = image_folder_name
         self.agent_collision = enable_agent_collision
         self.prefab_name = prefab_name
         self.starter_position = starter_position
-        self.__server_jit = fiveserver_jit
+        self.__server_jid = fiveserver_jid
 
     async def setup(self):
         fsm_behaviour = AgentBehaviour()
@@ -62,7 +62,7 @@ class EntityAgent(Agent):
         """
         Send a message and waits for a response
         """
-        message = Message(to=self.__server_jit)
+        message = Message(to=self.__server_jid)
         message.body = msg
         message.set_metadata("five", "command")
         await self.behaviours[0].send(message)
@@ -87,7 +87,7 @@ class EntityAgent(Agent):
         Send a command 
         """
         encoded_msg = json.dumps(msg)
-        message = Message(to=self.__server_jit)
+        message = Message(to=self.__server_jid)
         message.body = encoded_msg
         message.set_metadata("five", "command")
         await self.behaviours[0].send(message)

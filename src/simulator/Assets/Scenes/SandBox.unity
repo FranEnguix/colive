@@ -132,7 +132,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 240953869}
-  - component: {fileID: 240953870}
   - component: {fileID: 240953868}
   m_Layer: 0
   m_Name: Agent Manager
@@ -154,9 +153,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   xmppName: fiveserver
-  xmppPass: fiveserver
   xmppDomain: localhost
+  xmppPass: fiveserver
   xmppHostnameResolver: 127.0.0.1
+  xmppPort: 5222
   mapLoader: {fileID: 1877139294}
   agentsPrefabs:
   - {fileID: 4060794034721505095, guid: 920c30fea65ad2e47aad49c14dacf549, type: 3}
@@ -176,26 +176,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &240953870
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 240953867}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 062f5853bc2ca7041bb1f59f2a85f4c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  address: 127.0.0.1
-  commandPort: 6066
-  imagesPort: 6067
-  mapLoader: {fileID: 1877139294}
-  agentsPrefabs:
-  - {fileID: 4060794034721505095, guid: 920c30fea65ad2e47aad49c14dacf549, type: 3}
-  - {fileID: 5276972756449290981, guid: e631d8052f89ec14c8e58c60603ad039, type: 3}
-  - {fileID: 9103014078491276896, guid: c9f78625a1cbc7b4da881aa223a798cc, type: 3}
 --- !u!1 &482054537
 GameObject:
   m_ObjectHideFlags: 0

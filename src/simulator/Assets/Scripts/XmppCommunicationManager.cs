@@ -30,13 +30,20 @@ public class XmppCommunicationManager : MonoBehaviour
     private ConcurrentQueue<ICommand> commandQueue;
     private XmppClient xmppClient;
 
+    private Task connect;
+
     private void Awake() {
         LoadPlayerPrefs();
         entities = new Dictionary<string, GameObject>();
         spawners = new Dictionary<string, GameObject>();
         commandQueue = new ConcurrentQueue<ICommand>();
-        ConnectToXmppServerAsync();
-        SetupXmppHandlers();
+        connect = Task.Run(async () => await ConnectToXmppServerAsync());
+        // ConnectToXmppServerAsync();
+        /*
+            Debug.LogError("Ha habido un problema con la autenticación.");
+            Debug.LogError(ex.Message);
+            Debug.LogError(ex.StackTrace);
+        */
     }
 
     private void Start() {
@@ -45,10 +52,17 @@ public class XmppCommunicationManager : MonoBehaviour
 
     private void Update() {
         DequeueAndProcessCommand();
+        // var task = Task.Run(async () => await DequeueAndProcessCommand());
+        // task.Wait();
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            Debug.Log(connect.IsCompleted);
+        }
     }
 
     private void OnDestroy() {
-        xmppClient.DisconnectAsync();
+        if (xmppClient != null) {
+            xmppClient.DisconnectAsync();
+        }
     }
 
     private void LoadPlayerPrefs() {
@@ -64,16 +78,18 @@ public class XmppCommunicationManager : MonoBehaviour
             xmppPort = PlayerPrefs.GetInt("xmppPort");
     }
 
-    private async void ConnectToXmppServerAsync() {
+    private async Task ConnectToXmppServerAsync() {
         xmppClient = new XmppClient {
             Username = xmppName,
             XmppDomain = xmppDomain,
             Password = xmppPass,
-            HostnameResolver = new StaticNameResolver(xmppHostnameResolver),
+            HostnameResolver = new StaticNameResolver(xmppHostnameResolver),// new NameResolver(),
+            // HostnameResolver = new NameResolver(), // new NameResolver(),
             Port = xmppPort,
             CertificateValidator = new AlwaysAcceptCertificateValidator(),
-            Tls = false
+            Tls = true
         };
+        SetupXmppHandlers();
         await xmppClient.ConnectAsync();
         await xmppClient.SendPresenceAsync(Show.Chat, "fiveserver");
     }
@@ -179,8 +195,8 @@ public class XmppCommunicationManager : MonoBehaviour
         }
     }
 
-    private async Task SendPositionOfAvatarAgent(GameObject agent) {
+    private void SendPositionOfAvatarAgent(GameObject agent) {
         var entityComponent = agent.GetComponent<Entity>();
-        await entityComponent.SendCurrentPositionAsync();
+        entityComponent.SendCurrentPosition();
     }
 }

@@ -69,16 +69,16 @@ def setup_thread_agents(agents:list, simulator:dict, threads:list):
 
 def launch_agent(agent:dict, fiveserver:dict, entities:Queue):
     entity = EntityAgent(
-        name_at = f"{agent['name']}@{agent['at']}", 
+        agent_jid = f"{agent['name']}@{agent['at']}", 
         password = agent['password'],
         folder_capacity_size = agent['folderCapacitySize'],
         image_folder_name = agent['imageFolderName'],
         enable_agent_collision = agent['enableAgentCollision'],
         prefab_name = agent['prefabName'],
         starter_position = agent['position'],
-        fiveserver_jit = f"{fiveserver['name']}@{fiveserver['at']}"
+        fiveserver_jid = f"{fiveserver['name']}@{fiveserver['at']}"
     )
-    future = entity.start()
+    future = entity.start(auto_register = True)
     future.result()
     entities.put(entity)
 
