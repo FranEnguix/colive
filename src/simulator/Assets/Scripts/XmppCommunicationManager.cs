@@ -1,26 +1,21 @@
-using Matrix;
-using Matrix.Extensions.Client.Message;
-using Matrix.Extensions.Client.Presence;
-using Matrix.Network;
-using Matrix.Network.Resolver;
-using Matrix.Xml;
-using Matrix.Xmpp;
-using Matrix.Xmpp.Base;
-using Matrix.Xmpp.XData;
+using S22.Xmpp;
+using S22.Xmpp.Client;
+using S22.Xmpp.Extensions.Dataforms;
+using S22.Xmpp.Im;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
+using System.Security.Authentication;
+using System.Xml;
 using UnityEngine;
 
 public class XmppCommunicationManager : MonoBehaviour
 {
-	[SerializeField] private string xmppName = "fiveserver";
+	[SerializeField] private string xmppNode = "fiveserver";
 	[SerializeField] private string xmppDomain = "localhost";
 	[SerializeField] private string xmppPass = "fiveserver";
-	[SerializeField] private string xmppHostnameResolver = "127.0.0.1";
     [SerializeField] private int xmppPort = 5222;
+    [SerializeField] private bool xmppTls = true;
 
     [SerializeField] private GameObject mapLoader;
     [SerializeField] private GameObject[] agentsPrefabs;
@@ -30,14 +25,13 @@ public class XmppCommunicationManager : MonoBehaviour
     private ConcurrentQueue<ICommand> commandQueue;
     private XmppClient xmppClient;
 
-    private Task connect;
-
     private void Awake() {
         LoadPlayerPrefs();
         entities = new Dictionary<string, GameObject>();
         spawners = new Dictionary<string, GameObject>();
         commandQueue = new ConcurrentQueue<ICommand>();
-        connect = Task.Run(async () => await ConnectToXmppServerAsync());
+        ConnectToXmppServer();
+        // connect = Task.Run(async () => await ConnectToXmppServerAsync());
         // ConnectToXmppServerAsync();
         /*
             Debug.LogError("Ha habido un problema con la autenticación.");
@@ -55,29 +49,88 @@ public class XmppCommunicationManager : MonoBehaviour
         // var task = Task.Run(async () => await DequeueAndProcessCommand());
         // task.Wait();
         if (Input.GetKeyDown(KeyCode.Space)) {
-            Debug.Log(connect.IsCompleted);
+            Debug.Log(xmppClient.Connected);
         }
     }
 
     private void OnDestroy() {
-        if (xmppClient != null) {
-            xmppClient.DisconnectAsync();
+        if (xmppClient != null && xmppClient.Connected) {
+            xmppClient.Close();
         }
     }
 
     private void LoadPlayerPrefs() {
-        if (PlayerPrefs.HasKey("xmppName"))
-            xmppName = PlayerPrefs.GetString("xmppName");
+        if (PlayerPrefs.HasKey("xmppNode"))
+            xmppNode = PlayerPrefs.GetString("xmppNode");
         if (PlayerPrefs.HasKey("xmppDomain"))
             xmppDomain = PlayerPrefs.GetString("xmppDomain");
         if (PlayerPrefs.HasKey("xmppPass"))
             xmppPass = PlayerPrefs.GetString("xmppPass");
-        if (PlayerPrefs.HasKey("xmppIpAddress"))
-            xmppHostnameResolver = PlayerPrefs.GetString("xmppIpAddress");
         if (PlayerPrefs.HasKey("xmppPort"))
             xmppPort = PlayerPrefs.GetInt("xmppPort");
+        if (PlayerPrefs.HasKey("xmppTls"))
+            xmppTls = PlayerPrefs.GetInt("xmppTls") != 0;
     }
 
+    private void ConnectToXmppServer() {
+        ConnectXmppClient();
+        if (xmppClient.Connected) {
+            try {
+                xmppClient.Authenticate(xmppNode, xmppPass);
+            } catch (AuthenticationException) {
+                Debug.Log($"Username ({xmppNode}) and password not matched by any user.");
+                AttemptRegistrationInBand();
+            }
+        }
+    }
+
+    private void AttemptRegistrationInBand() {
+        if (!xmppClient.Connected)
+            ConnectXmppClient();
+        try {
+            xmppClient.Register(RegisterInBandCallback);
+            xmppClient.Authenticate(xmppNode, xmppPass);
+        } catch (XmppErrorException ex) {
+            Debug.LogError(ex.Error.Text);
+            throw ex;
+        }
+    }
+
+    private void ConnectXmppClient() {
+        xmppClient = new XmppClient(xmppDomain, xmppPort, xmppTls);
+        xmppClient.Message += OnNewXmppMessage;
+        xmppClient.Connect();
+    }
+
+    private void OnNewXmppMessage(object sender, MessageEventArgs e) {
+        var agent = e.Message.From;
+        var fiveserver = e.Message.To;
+        EnqueueCommandFromMessage(agent.Node, e.Message.Body);
+        // XmppCommunicator.SendXmppCommand(xmppClient, to: agent, from: fiveserver, "position 0 10 0");
+    }
+
+    private SubmitForm RegisterInBandCallback(RequestForm form) {
+        if (!String.IsNullOrEmpty(form.Instructions))
+            Debug.Log(form.Instructions);
+
+        SubmitForm submitForm = new SubmitForm();
+        foreach (var field in form.Fields) {
+            // Debug.Log($"{field.Name} | {field.Description} | {field.Type.Value} | {field.Required} | {field.Values}");
+            DataField f = null;
+
+            if (field is TextField && field.Required)
+                f = new TextField(field.Name, xmppNode);
+            else if (field is PasswordField && field.Required)
+                f = new PasswordField(field.Name, xmppPass);
+            else if (field is JidField && field.Required)
+                f = new JidField(field.Name, new Jid($"{xmppNode}@{xmppDomain}"));
+
+            if (f != null)
+                submitForm.Fields.Add(f);
+        }
+        return submitForm;
+    }
+        /*
     private async Task ConnectToXmppServerAsync() {
         xmppClient = new XmppClient {
             Username = xmppName,
@@ -93,7 +146,9 @@ public class XmppCommunicationManager : MonoBehaviour
         await xmppClient.ConnectAsync();
         await xmppClient.SendPresenceAsync(Show.Chat, "fiveserver");
     }
+        */
 
+    /*
     private void SetupXmppHandlers() {
         SetupCommandHandler();
         SetupPresenceHandler();
@@ -121,6 +176,7 @@ public class XmppCommunicationManager : MonoBehaviour
             Debug.Log($"XMPP presence from {presence.From}: {presence.Name}");
         });
     }
+    */
 
     private void LinkSpawners() {
         var mapLoaderScript = mapLoader.GetComponent<MapLoader>();

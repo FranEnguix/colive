@@ -1,7 +1,11 @@
+/*
 using Matrix;
 using Matrix.Extensions.Client.Message;
 using Matrix.Xmpp.Client;
 using Matrix.Xmpp.XData;
+*/
+using S22.Xmpp;
+using S22.Xmpp.Client;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -28,7 +32,6 @@ public class Entity : MonoBehaviour
     private bool goalSet;
     private bool agentCollision;
     private float stuckTimer;
-    private string entityName;
 
     private void Awake() {
         camManager = GetComponent<CameraManager>();
@@ -67,7 +70,7 @@ public class Entity : MonoBehaviour
     }
 
     private void CheckIfStuck() {
-        stuckTimer += UnityEngine.Time.deltaTime;
+        stuckTimer += Time.deltaTime;
         if (stuckTimer > stuckSecondsThreshold) {
             if (Vector3.Distance(transform.position, stuckPosition) < stuckDistanceThreshold) {
                 goalSet = false;
@@ -122,8 +125,9 @@ public class Entity : MonoBehaviour
 	public void SendPosition(Vector3 point) {
         string position = Vector3ToPosition(point);
         string name = this.name;
-        var task = Task.Run(async () => await XmppCommunicator.SendXmppCommand(xmppClient, name, xmppClient.XmppDomain, position));
-        task.Wait();
+        // var task = Task.Run(async () => await XmppCommunicator.SendXmppCommand(xmppClient, name, xmppClient.XmppDomain, position));
+        // task.Wait();
+        XmppCommunicator.SendXmppCommand(xmppClient, position, new Jid(xmppClient.Jid.Domain, name));
         Debug.Log(position);
         // tcpCommandManager.SendMessageToClient(position);
     }

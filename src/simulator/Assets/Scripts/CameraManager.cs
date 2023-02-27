@@ -1,4 +1,5 @@
-using Matrix;
+using S22.Xmpp;
+using S22.Xmpp.Client;
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
@@ -29,8 +30,8 @@ public class CameraManager : MonoBehaviour {
 
     void Update() {
         if (!ImageQueue.IsEmpty && ImageQueue.TryDequeue(out ImageData imageData)) {
-            var task = Task.Run(async () => await XmppCommunicator.SendXmppImage(XmppClient, agentName, XmppClient.XmppDomain, imageData));
-            var result = task.Wait(int.MaxValue);
+            // var task = Task.Run(async () => await XmppCommunicator.SendXmppImage(XmppClient, agentName, XmppClient.XmppDomain, imageData));
+            // var result = task.Wait(int.MaxValue);
         }
     }
 
@@ -43,7 +44,8 @@ public class CameraManager : MonoBehaviour {
                 cameraIndex = cameraIndex,
                 dateTimeUTC = dateTime
             };
-            ImageQueue.Enqueue(imageData);
+            // ImageQueue.Enqueue(imageData);
+            XmppCommunicator.SendXmppImage(XmppClient, imageData, new Jid(XmppClient.Jid.Domain, name));
             // await XmppCommunicator.SendXmppImage(XmppClient, name, XmppClient.XmppDomain, imageData);
             // Debug.Log("Image queue length: " + ImageQueue.Count);
         }
