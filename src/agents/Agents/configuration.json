@@ -13,6 +13,26 @@
             "enableAgentCollision": true,
             "prefabName": "Tractor",
             "position": "Spawner 1"
+        },
+        {
+            "name": "agente2",
+            "at": "localhost",
+            "password": "xmppserver",
+            "folderCapacitySize": 80,
+            "imageFolderName": "captures",
+            "enableAgentCollision": true,
+            "prefabName": "Tractor",
+            "position": "Spawner 2"
+        },
+        {
+            "name": "agente3",
+            "at": "localhost",
+            "password": "xmppserver",
+            "folderCapacitySize": 80,
+            "imageFolderName": "captures",
+            "enableAgentCollision": true,
+            "prefabName": "Tractor",
+            "position": "Spawner 3"
         }
     ]
 }
