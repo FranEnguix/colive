@@ -123,7 +123,7 @@ public class Entity : MonoBehaviour
     }
 
 	public void SendPosition(Vector3 point) {
-        string position = Vector3ToPosition(point);
+        string position = Utils.Vector3ToPosition(point);
         string name = this.name;
         // var task = Task.Run(async () => await XmppCommunicator.SendXmppCommand(xmppClient, name, xmppClient.XmppDomain, position));
         // task.Wait();
@@ -132,13 +132,6 @@ public class Entity : MonoBehaviour
         // tcpCommandManager.SendMessageToClient(position);
     }
 
-	private string Vector3ToPosition(Vector3 position) {
-        string newPosition = "position";
-        newPosition += string.Format(" {0:0.##}", position.x);
-        newPosition += string.Format(" {0:0.##}", position.y);
-        newPosition += string.Format(" {0:0.##}", position.z);
-		return newPosition;
-	}
 
     private void SetObstacleAvoidance(bool agentCollision) {
         if (navMeshAgent != null) {

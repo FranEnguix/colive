@@ -23,10 +23,6 @@ class EntityShell:
             await agent.change_color(0.5, 0, 0, 0.8)
         await agent.move_camera(0, Axis.Y, -1)
         await agent.fov_camera(0, 7)
-        # msg = Message(to="simulator@localhost")
-        # msg.set_metadata("performative", "inform")
-        # msg.body = f"Hola desde {agent.name}"
-        # await behaviour.send(msg)
         time.sleep(4)
 
     async def perception(agent: Agent, data: ImageData):
@@ -59,8 +55,7 @@ class EntityShell:
         if road_number % 2 == 1:
             amount = -amount
         position[2] += amount
-        new_position = f"({position[0]} {position[1]} {position[2]})"
-        agent.position = await agent.move_agent(new_position)
+        agent.position = await agent.move_agent(position)
 
     async def move_next_road(agent: Agent, road_number: int = 0):
         space = agent.distancey * 3
@@ -70,16 +65,14 @@ class EntityShell:
         else:
             position[2] -= space
         position[0] += agent.distancex
-        position_str = f"({position[0]} {position[1]} {position[2]})"
-        agent.position = await agent.move_agent(position_str)
+        agent.position = await agent.move_agent(position)
         position = agent.position.copy()
         position[0] += agent.distancex
         if road_number % 2 == 1:
             position[2] -= space - agent.distancey
         else:
             position[2] += space - agent.distancey
-        position_str = f"({position[0]} {position[1]} {position[2]})"
-        agent.position = await agent.move_agent(position_str)
+        agent.position = await agent.move_agent(position)
 
     async def take_picture(agent: Agent):
         await agent.rotate_camera(0, Axis.Y, 90)

@@ -10,7 +10,6 @@ from custom_typings import Config
 
 
 def create_default_config_file(filename: str) -> dict[Config]:
-    # TODO: replace string for code
     json_string = """
     {
         "fiveserver": {

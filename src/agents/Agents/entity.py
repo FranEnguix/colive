@@ -105,7 +105,8 @@ class EntityAgent(Agent):
         return [float(x) for x in (self.position.split())[1:]]
 
     async def move_agent(self, position: list) -> list:
-        command = { 'commandName': 'moveTo', 'data': [position] }
+        formatted_position = f"({position[0]} {position[1]} {position[2]})"
+        command = { 'commandName': 'moveTo', 'data': [formatted_position] }
         msg = (await self.send_command_to_server_and_wait(command)) # .decode('utf-8')
         new_position = [float(x) for x in (msg.split())[1:]]
         return new_position

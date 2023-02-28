@@ -99,6 +99,7 @@ public class CommandParser
         }
         return axis;
     }
+
     private static float[] ParseCoordinates(string message) {
         string regexPattern = @"^\((-?\d+(\.\d+)?) (-?\d+(\.\d+)?) (-?\d+(\.\d+)?)?\)$";
         Regex regex = new Regex(regexPattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
