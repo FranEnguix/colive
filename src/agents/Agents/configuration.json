@@ -1,12 +1,12 @@
 {
     "fiveserver": {
-        "name": "fiveserverfran",
-        "at": "gtirouter.dsic.upv.es"
+        "name": "fiveserver",
+        "at": "localhost"
     },
     "agents": [
         {
             "name": "agente1",
-            "at": "gtirouter.dsic.upv.es",
+            "at": "localhost",
             "password": "xmppserver",
             "folderCapacitySize": 80,
             "imageFolderName": "captures",
@@ -16,7 +16,7 @@
         },
         {
             "name": "agente2",
-            "at": "gtirouter.dsic.upv.es",
+            "at": "localhost",
             "password": "xmppserver",
             "folderCapacitySize": 80,
             "imageFolderName": "captures",
@@ -26,7 +26,7 @@
         },
         {
             "name": "agente3",
-            "at": "gtirouter.dsic.upv.es",
+            "at": "localhost",
             "password": "xmppserver",
             "folderCapacitySize": 80,
             "imageFolderName": "captures",

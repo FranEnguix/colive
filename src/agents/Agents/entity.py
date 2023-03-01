@@ -95,14 +95,13 @@ class EntityAgent(Agent):
 
     async def create_agent(self) -> None:
         command = { 'commandName': 'create', 'data': [self.name, self.prefab_name] }
-        position = self.starter_position
-        if isinstance(position, str):
-            command['data'].append(position)
+        if isinstance(self.starter_position, str):
+            command['data'].append(self.starter_position)
         else:
             command['data'].append(f"({position['x']} {position['y']} {position['z']})")
         command['data'].append(self.agent_collision)
         self.position = (await self.send_command_to_server_and_wait(command)) # .decode('utf-8')
-        self.position = position.replace(',', '.')
+        self.position = self.position.replace(',', '.')
         self.position = [float(x) for x in (self.position.split())[1:]]
 
     async def move_agent(self, position: list) -> list:
