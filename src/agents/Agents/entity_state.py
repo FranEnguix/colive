@@ -24,7 +24,7 @@ class StateInit(State):
         # self.commander = Commander(self, self.command_socket)
 
         print(f"{self.agent.name}: Create command sent.")
-        self.agent.position = await self.agent.create_agent()
+        await self.agent.create_agent()
         
         self.agent.image_counter = 0
         # self.agent.images = LifoQueue()

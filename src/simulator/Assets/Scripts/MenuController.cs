@@ -55,6 +55,7 @@ public class MenuController : MonoBehaviour
     private void Start() {
         resolutions = Screen.resolutions;
         PopulateResolutionDropdown();
+        PopulateFromPlayerPrefs();
     }
 
     private void Update() {
@@ -152,6 +153,8 @@ public class MenuController : MonoBehaviour
     }
 
     public void SetResolution(int resolutionIndex) {
+        if (resolutionIndex >= resolutions.Length)
+            resolutionIndex = resolutions.Length - 1;
         Resolution resolution = resolutions[resolutionIndex];
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
     }

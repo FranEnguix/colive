@@ -82,7 +82,7 @@ class EntityAgent(Agent):
         return None
 
 
-    async def send_command_to_server(self, msg:dict):
+    async def send_command_to_server(self, msg:dict) -> None:
         """
         Send a command 
         """
@@ -93,7 +93,7 @@ class EntityAgent(Agent):
         await self.behaviours[0].send(message)
 
 
-    async def create_agent(self) -> list:
+    async def create_agent(self) -> None:
         command = { 'commandName': 'create', 'data': [self.name, self.prefab_name] }
         position = self.starter_position
         if isinstance(position, str):
@@ -102,12 +102,14 @@ class EntityAgent(Agent):
             command['data'].append(f"({position['x']} {position['y']} {position['z']})")
         command['data'].append(self.agent_collision)
         self.position = (await self.send_command_to_server_and_wait(command)) # .decode('utf-8')
-        return [float(x) for x in (self.position.split())[1:]]
+        self.position = position.replace(',', '.')
+        self.position = [float(x) for x in (self.position.split())[1:]]
 
     async def move_agent(self, position: list) -> list:
         formatted_position = f"({position[0]} {position[1]} {position[2]})"
         command = { 'commandName': 'moveTo', 'data': [formatted_position] }
         msg = (await self.send_command_to_server_and_wait(command)) # .decode('utf-8')
+        msg = msg.replace(',', '.')
         new_position = [float(x) for x in (msg.split())[1:]]
         return new_position
 
