@@ -32,7 +32,8 @@ public class CommandParser
     }
 
     private static MoveToCommand MoveTo(CommandInfo info) {
-        float[] position = ParseCoordinates(info.data[0]);
+        // float[] position = ParseCoordinates(info.data[0]);
+        Vector3 position = JsonUtility.FromJson<Vector3>(info.data[0]);
         return new MoveToCommand {
             Position = position,
         };
@@ -46,8 +47,9 @@ public class CommandParser
             AgentPrefab = data[1],
             AgentCollision = agentCollision,
         };
-        if (data[2].StartsWith("("))
-            createCommand.StarterPosition = ParseCoordinates(data[2]);
+        if (data[2].Contains("{"))
+            createCommand.StarterPosition = JsonUtility.FromJson<Vector3>(data[2]);
+            // createCommand.StarterPosition = ParseCoordinates(data[2]);
         else
             createCommand.SpawnerName = data[2];
         return createCommand;
@@ -100,6 +102,8 @@ public class CommandParser
         return axis;
     }
 
+    /*
+    DEPRECATED
     private static float[] ParseCoordinates(string message) {
         string regexPattern = @"^\((-?\d+(\.\d+)?) (-?\d+(\.\d+)?) (-?\d+(\.\d+)?)?\)$";
         Regex regex = new Regex(regexPattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -112,6 +116,7 @@ public class CommandParser
             result[i] = float.Parse(groups[i * 2 + 1].Value);
         return result;
     }
+    */
 
     /*
     private static Color GetColor(string colorString) {

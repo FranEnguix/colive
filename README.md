@@ -44,3 +44,6 @@ To run the IVE with the inhabitant agents you have to:
 3. Run the agents by executing the **launcher.py** file.
 
 ![Orange orchard IVE inside vision](examples/pictures/orange_orchard_field_2.png)
+
+## Preconfigured example
+When you clone this project, you will found under release

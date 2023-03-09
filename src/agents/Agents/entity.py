@@ -18,7 +18,6 @@ from entity_state import StateInit, StatePerception, StateCognition, StateAction
 from commander import Axis
 
 class EntityAgent(Agent):
-    # TODO: dataclass
     def __init__(self, agent_jid: str, password: str, folder_capacity_size: int, image_folder_name: str, enable_agent_collision: bool, prefab_name: str, starter_position: dict, fiveserver_jid: str):
         Agent.__init__(self, agent_jid, password)
         self.folder_capacity_size = folder_capacity_size
@@ -98,19 +97,20 @@ class EntityAgent(Agent):
         if isinstance(self.starter_position, str):
             command['data'].append(self.starter_position)
         else:
-            command['data'].append(f"({position['x']} {position['y']} {position['z']})")
+            command['data'].append(json.dumps(self.starter_position))
+            # command['data'].append(f"({position['x']} {position['y']} {position['z']})")
         command['data'].append(self.agent_collision)
-        self.position = (await self.send_command_to_server_and_wait(command)) # .decode('utf-8')
-        self.position = self.position.replace(',', '.')
-        self.position = [float(x) for x in (self.position.split())[1:]]
+        response = (await self.send_command_to_server_and_wait(command)) # .decode('utf-8')
+        self.position = json.loads(response)
+        # self.position = [float(x) for x in (self.position.split())[1:]]
 
-    async def move_agent(self, position: list) -> list:
-        formatted_position = f"({position[0]} {position[1]} {position[2]})"
-        command = { 'commandName': 'moveTo', 'data': [formatted_position] }
-        msg = (await self.send_command_to_server_and_wait(command)) # .decode('utf-8')
-        msg = msg.replace(',', '.')
-        new_position = [float(x) for x in (msg.split())[1:]]
-        return new_position
+    async def move_agent(self, position: dict) -> dict:
+        # formatted_position = f"({position[0]} {position[1]} {position[2]})"
+        command = { 'commandName': 'moveTo', 'data': [ json.dumps(position) ] }
+        response = (await self.send_command_to_server_and_wait(command)) # .decode('utf-8')
+        # msg = msg.replace(',', '.')
+        # new_position = [float(x) for x in (msg.split())[1:]]
+        return json.loads(response)
 
     async def fov_camera(self, camera_id: int, fov: float):
         data = [ f"{camera_id}", f"{fov}" ]
@@ -134,6 +134,5 @@ class EntityAgent(Agent):
     async def change_color(self, r: float, g: float, b: float, a: float = 1):
         ''' Color must be normalized between [0, 1]'''
         color = { 'r': r, 'g': g, 'b': b, 'a': a }
-        color_string = json.dumps(color)
-        command = { 'commandName': 'color', 'data': [ color_string ] }
+        command = { 'commandName': 'color', 'data': [ json.dumps(color) ] }
         await self.send_command_to_server(command)

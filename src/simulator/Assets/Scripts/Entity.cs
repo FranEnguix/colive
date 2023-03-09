@@ -123,7 +123,8 @@ public class Entity : MonoBehaviour
     }
 
 	public void SendPosition(Vector3 point) {
-        string position = Utils.Vector3ToPosition(point);
+        // string position = Utils.Vector3ToPosition(point);
+        string position = JsonUtility.ToJson(point);
         string name = this.name;
         // var task = Task.Run(async () => await XmppCommunicator.SendXmppCommand(xmppClient, name, xmppClient.XmppDomain, position));
         // task.Wait();

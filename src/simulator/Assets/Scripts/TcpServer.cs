@@ -118,6 +118,16 @@ public class TcpServer : MonoBehaviour
     }
 
     private GameObject InstantiateEntity(GameObject agentPrefab, CreateCommand command) {
+        if (command.IsInstantiatedByCoordinates())
+            return Instantiate(agentPrefab, command.StarterPosition, Quaternion.identity);
+        else {
+            var spawner = spawners[command.SpawnerName];
+            Vector3 spawnerPosition = spawner.transform.position;
+            return Instantiate(agentPrefab, spawnerPosition, Quaternion.identity);
+        }
+
+        /*
+        DEPRECATED
         if (command.StarterPosition != null) {
             Vector3 position = command.StarterPosition3();
             return Instantiate(agentPrefab, position, Quaternion.identity);
@@ -126,6 +136,7 @@ public class TcpServer : MonoBehaviour
             Vector3 spawnerPosition = spawner.transform.position;
             return Instantiate(agentPrefab, spawnerPosition, Quaternion.identity);
         }
+        */
     }
 
     private void ReconnectEntity(CreateCommand command) {

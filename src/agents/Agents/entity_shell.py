@@ -54,24 +54,24 @@ class EntityShell:
         amount = agent.distancey
         if road_number % 2 == 1:
             amount = -amount
-        position[2] += amount
+        position['z'] += amount
         agent.position = await agent.move_agent(position)
 
     async def move_next_road(agent: Agent, road_number: int = 0):
         space = agent.distancey * 3
         position = agent.position.copy()
         if road_number % 2 == 1:
-            position[2] += space
+            position['z'] += space
         else:
-            position[2] -= space
-        position[0] += agent.distancex
+            position['z'] -= space
+        position['x'] += agent.distancex
         agent.position = await agent.move_agent(position)
         position = agent.position.copy()
-        position[0] += agent.distancex
+        position['x'] += agent.distancex
         if road_number % 2 == 1:
-            position[2] -= space - agent.distancey
+            position['z'] -= space - agent.distancey
         else:
-            position[2] += space - agent.distancey
+            position['z'] += space - agent.distancey
         agent.position = await agent.move_agent(position)
 
     async def take_picture(agent: Agent):
