@@ -5,6 +5,7 @@ public class SimulationController : MonoBehaviour
 {   private Camera activeCamera;
     private Camera mainCamera;
     private Camera cenitalCamera;
+	private Camera littleCamera;
 
     void Start ()
 	{
@@ -13,6 +14,11 @@ public class SimulationController : MonoBehaviour
 		cenitalCamera = GameObject.Find("Cenital Camera").GetComponent<Camera>();
 		cenitalCamera.GetComponent<AudioListener>().enabled = false;
 		cenitalCamera.enabled = false;
+		littleCamera = GameObject.Find("Little Camera").GetComponent<Camera>();
+		littleCamera.GetComponent<AudioListener>().enabled = false;
+		littleCamera.enabled = false;		
+
+
 		activeCamera = mainCamera;
 
         Debug.Log ("Inicializacion control");
@@ -33,14 +39,27 @@ public class SimulationController : MonoBehaviour
 			Debug.Log ("Post cambio");
 		}
 
-		if (Input.GetKeyDown(KeyCode.T)) {
+		if (Input.GetKeyDown(KeyCode.C)) {
 			activeCamera.enabled=false;
 			activeCamera.GetComponent<AudioListener>().enabled = false;
 			activeCamera = cenitalCamera;
 			activeCamera.enabled=true;
 			activeCamera.GetComponent<AudioListener>().enabled = true;
-			Debug.Log ("T cambio");
+			Debug.Log ("C cambio");
 		}
+
+	   
+		if (Input.GetKeyDown(KeyCode.L)) {
+			if (littleCamera.enabled){
+				littleCamera.enabled=false;
+			}
+			else{
+				littleCamera.enabled=true;
+				Debug.Log ("L cambio");
+			}
+		}
+	}
+
         
-    }
+    
 }

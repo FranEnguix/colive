@@ -13,9 +13,10 @@ public class CameraController : MonoBehaviour
  
     private void Update() {
         if (Camera.main) {
-            ControlMovement();
+            ControlMovement(); 
             ControlRotation();
         }
+        
     }
 
     private void ControlRotation() {
