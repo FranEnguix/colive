@@ -33,6 +33,13 @@ public class Entity : MonoBehaviour
     private bool agentCollision;
     private float stuckTimer;
 
+    private int conexionNumber;
+
+    private float radioCom=24;
+    private Dictionary<string, GameObject> entities;
+    private Dictionary<string, GameObject> comBeams;
+   
+
     private void Awake() {
         camManager = GetComponent<CameraManager>();
     }
@@ -44,11 +51,14 @@ public class Entity : MonoBehaviour
         stuckPosition = transform.position;
         navMeshAgent = GetComponent<NavMeshAgent>();
         SetObstacleAvoidance(agentCollision);
+        //conexionNumber=0;
+        comBeams = new Dictionary<string, GameObject>();
     }
 
     private void Update() {
         // TakePictureOnMouseClick();
         // GoToPointOnMouseClick();
+        CheckNeighbors();
         CheckIfGoalAchieved();
         if (goalSet)
             CheckIfStuck();
@@ -128,7 +138,7 @@ public class Entity : MonoBehaviour
         // var task = Task.Run(async () => await XmppCommunicator.SendXmppCommand(xmppClient, name, xmppClient.XmppDomain, position));
         // task.Wait();
         XmppCommunicator.SendXmppCommand(xmppClient, position, new Jid(xmppClient.Jid.Domain, name));
-        Debug.Log(position);
+        //Debug.Log(position);
         // tcpCommandManager.SendMessageToClient(position);
     }
 
@@ -152,6 +162,44 @@ public class Entity : MonoBehaviour
     public void StartListeningImages() {
         camManager.XmppClient = xmppClient;
         // camManager.ImageQueue = tcpImageManager.StartListeningImages();
+    }
+
+    public void CheckNeighbors(){
+        //private Dictionary<string, LineRenderer> comBeams;
+        int counter=-1;
+        //comBeams = new Dictionary<string, GameObject>();
+        entities = GameObject.Find("Agent Manager").GetComponent<XmppCommunicationManager>().Entities;
+       
+        Debug.Log("Dist "+this.name);
+       // bool itself=false;
+        foreach(var element in entities){
+            /*if (itself)
+                counter++;
+            else if(element.Value.name==this.name)
+                    itself=true;*/
+            float dist=Vector3.Distance(element.Value.transform.position,transform.position);
+            if (comBeams.ContainsKey(element.Value.name)){
+                    Debug.Log("repe");
+                    Destroy(comBeams[element.Value.name]);
+                }
+            if ((dist <= radioCom)&&(element.Value.name!=this.name)){
+                LineRenderer newBeam;
+                counter++;
+                Debug.Log("Dist 0"+element.Value.name);
+                //var LineRendered miLinea=GetComponent<LineRendered>;
+                
+                comBeams[element.Value.name]=new GameObject();
+                comBeams[element.Value.name].AddComponent<LineRenderer>(); 
+                Debug.Log("Dist 1 "+element.Value.name+" "+comBeams[element.Value.name]);
+                newBeam=comBeams[element.Value.name].GetComponent<LineRenderer>();
+                
+                newBeam.SetPosition(0, element.Value.transform.position);
+                Debug.Log("Dist 2 "+ element.Value.transform.position);
+                newBeam.SetPosition(1,transform.position); 
+                Debug.Log("Dist 3 "+ transform.position); 
+            }
+        }   
+        Debug.Log("Vecinos "+this.name+ " "+counter);
     }
 
     public TcpImageManager TcpImageManager {

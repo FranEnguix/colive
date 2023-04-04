@@ -138,6 +138,7 @@ public class MapLoader : MonoBehaviour
 
     private void PlaceObject(ObjectInfo objectInfo, Dictionary<string, GameObject> prefabs) {
         if (objectInfo.active) {
+            objectInfo.comRadio=4.0; //Luego vendrá de fichero map.json
             var objInstance = Instantiate(
                     prefabs[objectInfo.objectPrefabName],
                     objectInfo.position,
@@ -154,6 +155,7 @@ public class MapLoader : MonoBehaviour
                     Debug.LogError(objectInfo.objectName + " (" + objectInfo.objectPrefabName + ") ChangeTexture component is missing.");
                 }
             }
+            
             if (objectInfo.objectPrefabName == "Spawner")
                 spawners.Add(objInstance.name, objInstance);
         }
