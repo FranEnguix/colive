@@ -12,8 +12,11 @@ public class CameraController : MonoBehaviour
     private Quaternion anchorRotation;
  
     private void Update() {
-        ControlMovement();
-        ControlRotation();
+        if (Camera.main) {
+            ControlMovement(); 
+            ControlRotation();
+        }
+        
     }
 
     private void ControlRotation() {

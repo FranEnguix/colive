@@ -34,7 +34,7 @@ public class XmppCommunicationManager : MonoBehaviour
         // connect = Task.Run(async () => await ConnectToXmppServerAsync());
         // ConnectToXmppServerAsync();
         /*
-            Debug.LogError("Ha habido un problema con la autenticación.");
+            Debug.LogError("Ha habido un problema con la autenticaciï¿½n.");
             Debug.LogError(ex.Message);
             Debug.LogError(ex.StackTrace);
         */
@@ -50,6 +50,12 @@ public class XmppCommunicationManager : MonoBehaviour
         // task.Wait();
         if (Input.GetKeyDown(KeyCode.Space)) {
             Debug.Log(xmppClient.Connected);
+        }
+        if (Input.GetKeyDown(KeyCode.O)) {
+            foreach (var ent in entities){
+                Debug.Log("Hola");
+                 Debug.Log(ent.Key);
+            }
         }
     }
 
@@ -265,5 +271,10 @@ public class XmppCommunicationManager : MonoBehaviour
     private void SendPositionOfAvatarAgent(GameObject agent) {
         var entityComponent = agent.GetComponent<Entity>();
         entityComponent.SendCurrentPosition();
+    }
+
+    public Dictionary<string, GameObject> Entities {
+        get { return entities; }
+       
     }
 }
