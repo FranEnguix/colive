@@ -75,7 +75,8 @@ def launch_agent(agent_data:dict, fiveserver:dict, entities:Queue):
         enable_agent_collision = agent_data['enableAgentCollision'],
         prefab_name = agent_data['prefabName'],
         starter_position = agent_data['position'],
-        fiveserver_jid = f"{fiveserver['name']}@{fiveserver['at']}"
+        fiveserver_jid = f"{fiveserver['name']}@{fiveserver['at']}",
+        behaviour_path= agent_data['behaviour']
     )
     future = agent.start(auto_register = True)
     future.result()

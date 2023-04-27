@@ -12,7 +12,8 @@
             "imageFolderName": "captures",
             "enableAgentCollision": true,
             "prefabName": "Tractor",
-            "position": "Spawner 1"
+            "position": "Spawner 1",
+            "behaviour": "default"
         },
         {
             "name": "agente2",
@@ -22,7 +23,8 @@
             "imageFolderName": "captures",
             "enableAgentCollision": true,
             "prefabName": "Tractor",
-            "position": "Spawner 2"
+            "position": "Spawner 2",
+            "behaviour": "default"
         },
         {
             "name": "agente3",
@@ -32,7 +34,8 @@
             "imageFolderName": "captures",
             "enableAgentCollision": true,
             "prefabName": "Tractor",
-            "position": "Spawner 3"
+            "position": "Spawner 3",
+            "behaviour": "default"
         }
     ]
 }

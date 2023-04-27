@@ -28,7 +28,7 @@
     </Compile>
     <Compile Include="entity.py" />
     <Compile Include="entity_behaviour.py" />
-    <Compile Include="entity_shell.py" />
+    <Compile Include="behaviours\default.py" />
     <Compile Include="entity_state.py" />
     <Compile Include="image_data.py" />
     <Compile Include="launcher.py" />
@@ -43,6 +43,9 @@
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
       <Architecture>X64</Architecture>
     </Interpreter>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="behaviours\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
