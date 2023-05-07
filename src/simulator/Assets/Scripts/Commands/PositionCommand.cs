@@ -8,7 +8,7 @@ public class PositionCommand : ICommand
 
     string agentName;
 
-    public string AgentName { get => agentName; set => agentName = value; }
+    public string Name { get => agentName; set => agentName = value; }
 
     public PositionCommand() {
         positions = new Dictionary<string, float[]>();

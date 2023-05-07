@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraMoveCommand : ICommand {
-    public string AgentName { get; set; }
+    public string Name { get; set; }
 
     public int CameraIndex { get; set; }
 
@@ -12,7 +12,7 @@ public class CameraMoveCommand : ICommand {
     public float Units { get; set; }
 
     public void Execute(Dictionary<string, GameObject> gameObjects) {
-        var agent = gameObjects[AgentName];
+        var agent = gameObjects[Name];
         if (agent != null) {
             var entityComponent = agent.GetComponent<Entity>();
             entityComponent.CameraMove(CameraIndex, MoveAxis, Units);

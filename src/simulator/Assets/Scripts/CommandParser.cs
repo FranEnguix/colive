@@ -8,6 +8,8 @@ public class CommandParser
         CommandInfo info = JsonUtility.FromJson<CommandInfo>(order);
         if (info.commandName.StartsWith("moveTo"))
             command = MoveTo(info);
+        else if (info.commandName.StartsWith("createArtifact"))
+            command = CreateArtifact(info);
         else if (info.commandName.StartsWith("create"))
             command = Create(info);
         else if (info.commandName.StartsWith("image"))
@@ -39,11 +41,24 @@ public class CommandParser
         };
     }
 
+    private static CreateArtifactCommand CreateArtifact(CommandInfo info) {
+        var data = info.data;
+        var createCommand = new CreateArtifactCommand {
+            Name = data[0],
+            ArtifactPrefab = data[1],
+        };
+        if (data[2].Contains("{"))
+            createCommand.StarterPosition = JsonUtility.FromJson<Vector3>(data[2]);
+        else
+            createCommand.SpawnerName = data[2];
+        return createCommand;
+    }
+
     private static CreateCommand Create(CommandInfo info) {
         var data = info.data;
         bool agentCollision = bool.Parse(data[3]);
         var createCommand = new CreateCommand {
-            AgentName = data[0],
+            Name = data[0],
             AgentPrefab = data[1],
             AgentCollision = agentCollision,
         };

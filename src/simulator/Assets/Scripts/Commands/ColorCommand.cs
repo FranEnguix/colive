@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class ColorCommand : ICommand {
 
-    public string AgentName { get; set; }
+    public string Name { get; set; }
 
     public Color AgentColor { get; set; }
 
     public void Execute(Dictionary<string, GameObject> gameObjects) {
-        var agent = gameObjects[AgentName];
+        var agent = gameObjects[Name];
         if (agent != null) {
             var entityComponent = agent.GetComponent<Entity>();
             entityComponent.ChangeColor(AgentColor);

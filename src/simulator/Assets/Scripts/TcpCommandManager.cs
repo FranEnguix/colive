@@ -106,9 +106,9 @@ public class TcpCommandManager
         ICommand command = CommandParser.ParseCommand(message);
         if (command != null) {
             if (AgentName == null && command is CreateCommand)
-                AgentName = command.AgentName;
+                AgentName = command.Name;
             else
-                command.AgentName = AgentName;
+                command.Name = AgentName;
             callbackQueue.Enqueue(command);
         }
     }
