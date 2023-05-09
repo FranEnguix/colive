@@ -22,7 +22,15 @@ public class CommandParser
             command = CameraMove(info);
         else if (info.commandName.StartsWith("color"))
             command = GetColorCommand(info);
+        else if (info.commandName.StartsWith("displayData"))
+            command = GetDisplayDataCommand(info);
         return command;
+    }
+
+    private static DisplayDataCommand GetDisplayDataCommand(CommandInfo info) {
+        return new DisplayDataCommand {
+            Data = info.data
+        };
     }
 
 

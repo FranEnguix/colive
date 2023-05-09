@@ -1,3 +1,4 @@
+using S22.Xmpp;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,8 @@ using UnityEngine;
 public class CreateArtifactCommand : ICommand
 {
     public string Name { get; set; }
+
+    public Jid Jid { get; set; }
 
     public string ArtifactPrefab { get; set; }
 

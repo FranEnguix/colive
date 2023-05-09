@@ -32,6 +32,7 @@ public class Entity : MonoBehaviour
     private bool goalSet;
     private bool agentCollision;
     private float stuckTimer;
+    private Jid jid;
 
     private int conexionNumber;
 
@@ -46,7 +47,6 @@ public class Entity : MonoBehaviour
 
     private void Start() {
         goalSet = false;
-        text.text = name;
         stuckTimer = 0;
         stuckPosition = transform.position;
         navMeshAgent = GetComponent<NavMeshAgent>();
@@ -64,6 +64,9 @@ public class Entity : MonoBehaviour
             CheckIfStuck();
     }
 
+    public void SetDisplayName(string displayName) {
+        text.text = displayName;
+    }
 
     public void SetTargetPosition(Vector3 point) {
         navMeshAgent.destination = point;
@@ -135,10 +138,10 @@ public class Entity : MonoBehaviour
 	public void SendPosition(Vector3 point) {
         // string position = Utils.Vector3ToPosition(point);
         string position = JsonUtility.ToJson(point);
-        string name = this.name;
+        XmppCommunicator.SendXmppCommand(xmppClient, position, jid);
         // var task = Task.Run(async () => await XmppCommunicator.SendXmppCommand(xmppClient, name, xmppClient.XmppDomain, position));
         // task.Wait();
-        XmppCommunicator.SendXmppCommand(xmppClient, position, new Jid(xmppClient.Jid.Domain, name));
+        // XmppCommunicator.SendXmppCommand(xmppClient, position, new Jid(xmppClient.Jid.Domain, name));
         //Debug.Log(position);
         // tcpCommandManager.SendMessageToClient(position);
     }
@@ -171,7 +174,7 @@ public class Entity : MonoBehaviour
         //comBeams = new Dictionary<string, GameObject>();
         entities = GameObject.Find("Agent Manager").GetComponent<XmppCommunicationManager>().Entities;
        
-        Debug.Log("Dist "+this.name);
+        // Debug.Log("Dist "+this.name);
        // bool itself=false;
         foreach(var element in entities){
             /*if (itself)
@@ -180,27 +183,27 @@ public class Entity : MonoBehaviour
                     itself=true;*/
             float dist=Vector3.Distance(element.Value.transform.position,transform.position);
             if (comBeams.ContainsKey(element.Value.name)){
-                    Debug.Log("repe");
+                    // Debug.Log("repe");
                     Destroy(comBeams[element.Value.name]);
                 }
             if ((dist <= radioCom)&&(element.Value.name!=this.name)){
                 LineRenderer newBeam;
                 counter++;
-                Debug.Log("Dist 0"+element.Value.name);
+                // Debug.Log("Dist 0"+element.Value.name);
                 //var LineRendered miLinea=GetComponent<LineRendered>;
                 
                 comBeams[element.Value.name]=new GameObject();
                 comBeams[element.Value.name].AddComponent<LineRenderer>(); 
-                Debug.Log("Dist 1 "+element.Value.name+" "+comBeams[element.Value.name]);
+                // Debug.Log("Dist 1 "+element.Value.name+" "+comBeams[element.Value.name]);
                 newBeam=comBeams[element.Value.name].GetComponent<LineRenderer>();
                 
                 newBeam.SetPosition(0, element.Value.transform.position);
-                Debug.Log("Dist 2 "+ element.Value.transform.position);
+                // Debug.Log("Dist 2 "+ element.Value.transform.position);
                 newBeam.SetPosition(1,transform.position); 
-                Debug.Log("Dist 3 "+ transform.position); 
+                // Debug.Log("Dist 3 "+ transform.position); 
             }
         }   
-        Debug.Log("Vecinos "+this.name+ " "+counter);
+        // Debug.Log("Vecinos "+this.name+ " "+counter);
     }
 
     public TcpImageManager TcpImageManager {
@@ -230,5 +233,10 @@ public class Entity : MonoBehaviour
     public bool AgentCollision {
         get { return agentCollision; }
         set { agentCollision = value; }
+    }
+
+    public Jid Jid {
+        get { return jid; }
+        set { jid = value; }
     }
 }

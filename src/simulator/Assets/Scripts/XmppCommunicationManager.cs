@@ -80,7 +80,9 @@ public class XmppCommunicationManager : MonoBehaviour
                 xmppClient.Authenticate(xmppNode, xmppPass);
             } catch (AuthenticationException) {
                 Debug.Log($"Username ({xmppNode}) and password not matched by any user.");
+                Debug.Log("Attempting In-Band registration...");
                 AttemptRegistrationInBand();
+                Debug.Log("Success!");
             }
         }
     }
@@ -104,9 +106,9 @@ public class XmppCommunicationManager : MonoBehaviour
     }
 
     private void OnNewXmppMessage(object sender, MessageEventArgs e) {
-        var agent = e.Message.From;
-        var fiveserver = e.Message.To;
-        EnqueueCommandFromMessage(agent.Node, e.Message.Body);
+        // var agent = e.Message.From;
+        // var fiveserver = e.Message.To;
+        EnqueueCommandFromMessage(e.Message.From, e.Message.Body);
         // XmppCommunicator.SendXmppCommand(xmppClient, to: agent, from: fiveserver, "position 0 10 0");
     }
 
@@ -137,13 +139,21 @@ public class XmppCommunicationManager : MonoBehaviour
         spawners = mapLoaderScript.GetSpawners();
     }
 
-    private void EnqueueCommandFromMessage(string agentName, string message) {
+    private void EnqueueCommandFromMessage(Jid sender, string message) {
         ICommand command = CommandParser.ParseCommand(message);
         if (command != null) {
-            command.Name = agentName;
+            if (command is CreateArtifactCommand createArtifactCommand) {
+                createArtifactCommand.Jid = sender;
+                command = createArtifactCommand;
+            } else if (command is CreateCommand createEntity) {
+                createEntity.Jid = sender;
+                command = createEntity;
+            } else {
+                command.Name = sender.ToString();
+            }
             commandQueue.Enqueue(command);
         } else {
-            Debug.LogWarning($"{agentName} sent a missformat command: {message}"); ;
+            Debug.LogWarning($"{sender.Node} sent a missformat command: {message}"); ;
         }
     }
 
@@ -152,11 +162,11 @@ public class XmppCommunicationManager : MonoBehaviour
             if (commandQueue.TryDequeue(out ICommand command)) {
                 command.Execute(entities);
                 if (command is CreateCommand create) {
-                    if (!entities.ContainsKey(create.Name))
+                    if (!entities.ContainsKey(create.Jid.ToString()))
                         CreateEntity(create);
-                    SendPositionOfAvatarAgent(entities[create.Name]);
+                    SendPositionOfAvatarAgent(entities[create.Jid.ToString()]);
                 } else if (command is CreateArtifactCommand createArtifact) {
-                    if (!entities.ContainsKey(createArtifact.Name))
+                    if (!entities.ContainsKey(createArtifact.Jid.ToString()))
                         CreateArtifactEntity(createArtifact);
                 }
             }
@@ -166,7 +176,10 @@ public class XmppCommunicationManager : MonoBehaviour
         GameObject agentPrefab = GetAgentPrefab(command.AgentPrefab);
         if (agentPrefab != null) {
             GameObject entity = InstantiateEntity(agentPrefab, command);
-            entity.name = command.Name;
+            var entityScript = entity.GetComponent<Entity>();
+            entityScript.SetDisplayName(command.Name);
+            entityScript.Jid = command.Jid;
+            entity.name = command.Jid.ToString();
             entities.Add(entity.name, entity);
             // var tcpClient = tcpCommandClients.Find(x => x.AgentName == command.AgentName);
             var entityComponent = entity.GetComponent<Entity>();
@@ -174,17 +187,21 @@ public class XmppCommunicationManager : MonoBehaviour
             // entityComponent.TcpCommandManager = tcpClient;
             entityComponent.AgentCollision = command.AgentCollision;
         } else {
-            Debug.LogError($"Agent {command.Name} asks for non existing prefab: {command.AgentPrefab}");
+            Debug.LogError($"Agent {command.Jid} asks for non existing prefab: {command.AgentPrefab}");
         }
     }
+
     private void CreateArtifactEntity(CreateArtifactCommand command) {
         GameObject artifactPrefab = GetArtifactPrefab(command.ArtifactPrefab);
         if (artifactPrefab != null) {
             GameObject entity = InstantiateEntity(artifactPrefab, command);
-            entity.name = command.Name;
+            var entityScript = entity.GetComponent<Artifact>();
+            entityScript.Jid = command.Jid;
+            entityScript.SetDisplayName(command.Name);
+            entity.name = command.Jid.ToString();
             entities.Add(entity.name, entity);
         } else {
-            Debug.LogError($"Artifact {command.Name} asks for non existing prefab: {command.ArtifactPrefab}");
+            Debug.LogError($"Artifact {command.Jid} asks for non existing prefab: {command.ArtifactPrefab}");
         }
     }
 

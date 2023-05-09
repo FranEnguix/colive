@@ -29,7 +29,8 @@ def create_default_config_file(filename: str) -> dict[Config]:
                     "x": -2.6,
                     "y": 0.0,
                     "z": 0.0
-                }
+                },
+                "behaviour": "default"
             },
             {
                 "name": "agente2",
@@ -39,7 +40,8 @@ def create_default_config_file(filename: str) -> dict[Config]:
                 "imageFolderName": "captures",
                 "enableAgentCollision": true,
                 "prefabName": "Tractor",
-                "position": "Spawner 1"
+                "position": "Spawner 1",
+                "behaviour": "default"
             }
         ]
     }
