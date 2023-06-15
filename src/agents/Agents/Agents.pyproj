@@ -22,6 +22,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="behaviours\flamas.py" />
     <Compile Include="commander.py" />
     <Compile Include="custom_typings.py">
       <SubType>Code</SubType>
@@ -29,6 +30,7 @@
     <Compile Include="entity.py" />
     <Compile Include="entity_behaviour.py" />
     <Compile Include="behaviours\default.py" />
+    <Compile Include="flamas_state.py" />
     <Compile Include="entity_state.py" />
     <Compile Include="image_data.py" />
     <Compile Include="launcher.py" />

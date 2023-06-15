@@ -30,6 +30,7 @@ def create_default_config_file(filename: str) -> dict[Config]:
                     "y": 0.0,
                     "z": 0.0
                 },
+                "algorithms": [],
                 "behaviour": "default"
             },
             {
@@ -41,6 +42,7 @@ def create_default_config_file(filename: str) -> dict[Config]:
                 "enableAgentCollision": true,
                 "prefabName": "Tractor",
                 "position": "Spawner 1",
+                "algorithms": [], 
                 "behaviour": "default"
             }
         ]
@@ -78,7 +80,8 @@ def launch_agent(agent_data:dict, fiveserver:dict, entities:Queue):
         prefab_name = agent_data['prefabName'],
         starter_position = agent_data['position'],
         fiveserver_jid = f"{fiveserver['name']}@{fiveserver['at']}",
-        behaviour_path= agent_data['behaviour']
+        algorithms = agent_data['algorithms'],
+        behaviour_path = agent_data['behaviour']
     )
     future = agent.start(auto_register = True)
     future.result()

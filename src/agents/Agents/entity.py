@@ -16,16 +16,20 @@ from spade.template import Template
 from entity_behaviour import AgentBehaviour, AgentImageBehaviour
 from entity_state import STATE_INIT, STATE_PERCEPTION, STATE_COGNITION, STATE_ACTION
 from entity_state import StateInit, StatePerception, StateCognition, StateAction
+from flamas_state import *
+# from flamas_state import STATE_FLAMAS_SETUP, STATE_FLAMAS_SEND, STATE_FLAMAS_RECEIVE, STATE_FLAMAS_TRAIN
+# from flamas_state import StateInit, StatePerception, StateCognition, StateAction
 from commander import Axis
 
 class EntityAgent(Agent):
-    def __init__(self, agent_jid: str, password: str, folder_capacity_size: int, image_folder_name: str, enable_agent_collision: bool, prefab_name: str, starter_position: dict, fiveserver_jid: str, behaviour_path: str):
+    def __init__(self, agent_jid: str, password: str, folder_capacity_size: int, image_folder_name: str, enable_agent_collision: bool, prefab_name: str, starter_position: dict, fiveserver_jid: str, algorithms: list[str], behaviour_path: str):
         Agent.__init__(self, agent_jid, password)
         self.folder_capacity_size = folder_capacity_size
         self.image_folder_name = image_folder_name
         self.agent_collision = enable_agent_collision
         self.prefab_name = prefab_name
         self.starter_position = starter_position
+        self.__algorithms = algorithms
         self.__server_jid = fiveserver_jid
         self.__behaviour_path = behaviour_path
 
@@ -62,6 +66,25 @@ class EntityAgent(Agent):
         self.image_queue = LifoQueue()
         self.add_behaviour(AgentImageBehaviour(), image_template)
 
+        # FLAMAS
+        if "flamas" in self.__algorithms:
+            fsm_behaviour = AgentBehaviour()
+
+            # STATES
+            fsm_behaviour.add_state(name=STATE_FLAMAS_SETUP, state=StateFlamasSetup(behaviour_class), initial=True)
+            fsm_behaviour.add_state(name=STATE_FLAMAS_RECEIVE, state=StateFlamasReceive(behaviour_class))
+            fsm_behaviour.add_state(name=STATE_FLAMAS_TRAIN, state=StateFlamasTrain(behaviour_class))
+            fsm_behaviour.add_state(name=STATE_FLAMAS_SEND, state=StateFlamasSend(behaviour_class))
+
+            # TRANSITIONS
+            fsm_behaviour.add_transition(source=STATE_FLAMAS_SETUP, dest=STATE_FLAMAS_RECEIVE)
+            fsm_behaviour.add_transition(source=STATE_FLAMAS_RECEIVE, dest=STATE_FLAMAS_TRAIN)
+            fsm_behaviour.add_transition(source=STATE_FLAMAS_TRAIN, dest=STATE_FLAMAS_SEND)
+            fsm_behaviour.add_transition(source=STATE_FLAMAS_SEND, dest=STATE_FLAMAS_RECEIVE)
+
+            flamas_weights_template = Template()
+            flamas_weights_template.set_metadata("flamas", "weights")
+            self.add_behaviour(fsm_behaviour, flamas_weights_template)
 
     async def send_msg_to_server_and_wait(self, msg:str) -> str:
         """

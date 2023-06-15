@@ -13,7 +13,8 @@
             "enableAgentCollision": true,
             "prefabName": "Tractor",
             "position": "Spawner 1",
-            "behaviour": "default"
+            "algorithms": ["flamas"],
+            "behaviour": "flamas"
         },
         {
             "name": "agente2",
@@ -24,18 +25,8 @@
             "enableAgentCollision": true,
             "prefabName": "Tractor",
             "position": "Spawner 2",
-            "behaviour": "default"
-        },
-        {
-            "name": "agente3",
-            "at": "localhost",
-            "password": "xmppserver",
-            "folderCapacitySize": 80,
-            "imageFolderName": "captures",
-            "enableAgentCollision": true,
-            "prefabName": "Tractor",
-            "position": "Spawner 3",
-            "behaviour": "default"
+            "algorithms": ["flamas"],
+            "behaviour": "flamas"
         }
     ]
 }
