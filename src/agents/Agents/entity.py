@@ -16,9 +16,6 @@ from spade.template import Template
 from entity_behaviour import AgentBehaviour, AgentImageBehaviour
 from entity_state import STATE_INIT, STATE_PERCEPTION, STATE_COGNITION, STATE_ACTION
 from entity_state import StateInit, StatePerception, StateCognition, StateAction
-from flamas_state import *
-# from flamas_state import STATE_FLAMAS_SETUP, STATE_FLAMAS_SEND, STATE_FLAMAS_RECEIVE, STATE_FLAMAS_TRAIN
-# from flamas_state import StateInit, StatePerception, StateCognition, StateAction
 from commander import Axis
 
 class EntityAgent(Agent):
@@ -34,6 +31,7 @@ class EntityAgent(Agent):
         self.__behaviour_path = behaviour_path
 
     async def setup(self):
+        await super().setup()
         class_name = "EntityShell"
         behaviour_class_path = f"behaviours.{self.__behaviour_path}"
         behaviour_class = getattr(importlib.import_module(behaviour_class_path), class_name)
@@ -66,26 +64,7 @@ class EntityAgent(Agent):
         self.image_queue = LifoQueue()
         self.add_behaviour(AgentImageBehaviour(), image_template)
 
-        # FLAMAS
-        if "flamas" in self.__algorithms:
-            fsm_behaviour = AgentBehaviour()
-
-            # STATES
-            fsm_behaviour.add_state(name=STATE_FLAMAS_SETUP, state=StateFlamasSetup(behaviour_class), initial=True)
-            fsm_behaviour.add_state(name=STATE_FLAMAS_RECEIVE, state=StateFlamasReceive(behaviour_class))
-            fsm_behaviour.add_state(name=STATE_FLAMAS_TRAIN, state=StateFlamasTrain(behaviour_class))
-            fsm_behaviour.add_state(name=STATE_FLAMAS_SEND, state=StateFlamasSend(behaviour_class))
-
-            # TRANSITIONS
-            fsm_behaviour.add_transition(source=STATE_FLAMAS_SETUP, dest=STATE_FLAMAS_RECEIVE)
-            fsm_behaviour.add_transition(source=STATE_FLAMAS_RECEIVE, dest=STATE_FLAMAS_TRAIN)
-            fsm_behaviour.add_transition(source=STATE_FLAMAS_TRAIN, dest=STATE_FLAMAS_SEND)
-            fsm_behaviour.add_transition(source=STATE_FLAMAS_SEND, dest=STATE_FLAMAS_RECEIVE)
-
-            flamas_weights_template = Template()
-            flamas_weights_template.set_metadata("flamas", "weights")
-            self.add_behaviour(fsm_behaviour, flamas_weights_template)
-
+        
     async def send_msg_to_server_and_wait(self, msg:str) -> str:
         """
         Send a message and waits for a response
