@@ -1,0 +1,14 @@
+  A A     A A A
+ B C G H S B B
+ B C G H S B B
+ B C G H S B B
+ B C G H S B B
+ B C G H S B B
+ B C G H S B B
+ B C G H S B B
+ B C G H S B B
+ B C G H S B B
+ B C G H S B B
+ B C G H S B B
+     G H S   B
+           C B

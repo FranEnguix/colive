@@ -51,12 +51,12 @@ public class XmppCommunicationManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space)) {
             Debug.Log(xmppClient.Connected);
         }
-        if (Input.GetKeyDown(KeyCode.O)) {
+        /*if (Input.GetKeyDown(KeyCode.O)) {
             foreach (var ent in entities){
-                Debug.Log("Hola");
+               // Debug.Log("Hola");
                  Debug.Log(ent.Key);
             }
-        }
+        }*/
     }
 
     private void OnDestroy() {

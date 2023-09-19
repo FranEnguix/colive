@@ -15,6 +15,8 @@ public class MapLoader : MonoBehaviour
     private Dictionary<string, GameObject> prefabs;
     private Dictionary<string, GameObject> spawners;
 
+    public  Vector3 Origin_map, End_map;
+
     //private int objectsSpawned;
 
     private void Awake() {
@@ -66,6 +68,8 @@ public class MapLoader : MonoBehaviour
         float currentX = mapConfiguration.origin.x;
         float currentY = mapConfiguration.origin.y;
         float currentZ = mapConfiguration.origin.z;
+        float maxX = 0;
+        Origin_map = mapConfiguration.origin; //To use in cenital camera
         IEnumerable<string> lines = File.ReadLines(filename);
         foreach (string line in lines) {
             char[] chars = line.ToCharArray();
@@ -76,10 +80,17 @@ public class MapLoader : MonoBehaviour
                     //objectsSpawned++;
                 }
                 currentX += mapConfiguration.distance.x;
+                
             }
+            if (currentX> maxX)
+                maxX = currentX;
             currentX = mapConfiguration.origin.x;
             currentZ += mapConfiguration.distance.y;
+             
         }
+        End_map.x = maxX;
+        End_map.z = currentZ;
+        Debug.Log("Origin " + Origin_map + " End "+ End_map);
     }
 
     private void InstantiateSymbol(Dictionary<string, SymbolPrefabPair> symbolToPrefabMapping, char symbol, Vector3 pos, ref int spawnerCounter) {

@@ -171,7 +171,7 @@ public class Entity : MonoBehaviour
         //comBeams = new Dictionary<string, GameObject>();
         entities = GameObject.Find("Agent Manager").GetComponent<XmppCommunicationManager>().Entities;
        
-        Debug.Log("Dist "+this.name);
+        //Debug.Log("Dist "+this.name);
        // bool itself=false;
         foreach(var element in entities){
             /*if (itself)
@@ -179,28 +179,34 @@ public class Entity : MonoBehaviour
             else if(element.Value.name==this.name)
                     itself=true;*/
             float dist=Vector3.Distance(element.Value.transform.position,transform.position);
+           
             if (comBeams.ContainsKey(element.Value.name)){
-                    Debug.Log("repe");
+                   
                     Destroy(comBeams[element.Value.name]);
                 }
+            
             if ((dist <= radioCom)&&(element.Value.name!=this.name)){
                 LineRenderer newBeam;
                 counter++;
-                Debug.Log("Dist 0"+element.Value.name);
+                
                 //var LineRendered miLinea=GetComponent<LineRendered>;
                 
                 comBeams[element.Value.name]=new GameObject();
-                comBeams[element.Value.name].AddComponent<LineRenderer>(); 
-                Debug.Log("Dist 1 "+element.Value.name+" "+comBeams[element.Value.name]);
-                newBeam=comBeams[element.Value.name].GetComponent<LineRenderer>();
                 
+                comBeams[element.Value.name].AddComponent<LineRenderer>(); 
+                
+                //Debug.Log("Dist 1 "+element.Value.name+" "+comBeams[element.Value.name]);
+                newBeam=comBeams[element.Value.name].GetComponent<LineRenderer>();
+               
+                newBeam.positionCount = 4;
                 newBeam.SetPosition(0, element.Value.transform.position);
-                Debug.Log("Dist 2 "+ element.Value.transform.position);
-                newBeam.SetPosition(1,transform.position); 
-                Debug.Log("Dist 3 "+ transform.position); 
+                newBeam.SetPosition(1,element.Value.transform.position+(transform.position-element.Value.transform.position)/3);  //varios segmentos
+                newBeam.SetPosition(2,element.Value.transform.position+(transform.position-element.Value.transform.position)*2/3);
+                newBeam.SetPosition(3,transform.position); 
+                
             }
         }   
-        Debug.Log("Vecinos "+this.name+ " "+counter);
+        
     }
 
     public TcpImageManager TcpImageManager {

@@ -9,6 +9,10 @@ public class SimulationController : MonoBehaviour
 
     void Start ()
 	{
+		MapLoader mapLoader;
+		float wideX, wideZ, maxY, heightY;
+
+		mapLoader=FindObjectOfType<MapLoader>();
 		mainCamera =GameObject.FindWithTag ("MainCamera").GetComponent<Camera>();
 		mainCamera.GetComponent<AudioListener>().enabled = true;
 		cenitalCamera = GameObject.Find("Cenital Camera").GetComponent<Camera>();
@@ -19,9 +23,24 @@ public class SimulationController : MonoBehaviour
 		littleCamera.enabled = false;		
 
 
+		Debug.Log("SC: " + mapLoader.Origin_map + "  "+ mapLoader.End_map);
+		wideX = mapLoader.End_map.x - mapLoader.Origin_map.x;
+		wideZ = mapLoader.End_map.z - mapLoader.Origin_map.z;
+		
+		if (Mathf.Abs(wideX) < Mathf.Abs(wideZ)){
+			cenitalCamera.transform.Rotate(0,0,90);
+			maxY = wideZ;
+		}
+		else
+			maxY = wideX;
+
+		Debug.Log("PC: " + wideX + "  "+ wideZ);
+		
+		heightY = 100 * maxY / 126; // Height of cenital camera depends on the maximum side
+		cenitalCamera.transform.position = new Vector3(mapLoader.Origin_map.x+wideX/2,heightY,mapLoader.Origin_map.z+wideZ/2);
 		activeCamera = mainCamera;
 
-        Debug.Log ("Inicializacion control");
+        //Debug.Log ("Inicializacion control");
 	}
     private void Update()
     {
@@ -36,7 +55,7 @@ public class SimulationController : MonoBehaviour
 			activeCamera.enabled=true;
 			activeCamera.GetComponent<AudioListener>().enabled = true;
 
-			Debug.Log ("Post cambio");
+			//Debug.Log ("Post cambio");
 		}
 
 		if (Input.GetKeyDown(KeyCode.C)) {
@@ -45,7 +64,7 @@ public class SimulationController : MonoBehaviour
 			activeCamera = cenitalCamera;
 			activeCamera.enabled=true;
 			activeCamera.GetComponent<AudioListener>().enabled = true;
-			Debug.Log ("C cambio");
+			//Debug.Log ("C cambio");
 		}
 
 	   
@@ -55,7 +74,7 @@ public class SimulationController : MonoBehaviour
 			}
 			else{
 				littleCamera.enabled=true;
-				Debug.Log ("L cambio");
+				//Debug.Log ("L cambio");
 			}
 		}
 	}

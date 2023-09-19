@@ -6,7 +6,7 @@
     },
     "distance": {
         "x": 6,
-        "y": 9
+        "y": 3
     },
     "symbolToPrefabMap": [
         {
@@ -16,27 +16,27 @@
         {
             "symbol": "B",
             "prefabName": "Tree Fruit Variant",
-            "dataFolder": "C:/Users/LuisHL/Prueba_Five/oranges/black spot"
+            "dataFolder": "C:/Users/Fran/Pictures/oranges/black spot"
         },
         {
             "symbol": "C",
             "prefabName": "Tree Fruit Variant",
-            "dataFolder": "C:/Users/LuisHL/Prueba_Five/oranges/canker"
+            "dataFolder": "C:/Users/Fran/Pictures/oranges/canker"
         },
         {
             "symbol": "G",
             "prefabName": "Tree Fruit Variant",
-            "dataFolder": "C:/Users/LuisHL/Prueba_Five/oranges/greening"
+            "dataFolder": "C:/Users/Fran/Pictures/oranges/greening"
         },
         {
             "symbol": "H",
             "prefabName": "Tree Fruit Variant",
-            "dataFolder": "C:/Users/LuisHL/Prueba_Five/oranges/healthy"
+            "dataFolder": "C:/Users/Fran/Pictures/oranges/healthy"
         },
         {
             "symbol": "S",
             "prefabName": "Tree Fruit Variant",
-            "dataFolder": "C:/Users/LuisHL/Prueba_Five/oranges/scab"
+            "dataFolder": "C:/Users/Fran/Pictures/oranges/scab"
         },
         {
             "symbol": "A",
