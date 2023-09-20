@@ -7,6 +7,7 @@ from image_data import ImageData
 
 class AgentBehaviour(FSMBehaviour):
     async def on_end(self):
+        self.agent.presence.set_unavailable()
         await self.agent.stop()
 
 class AgentImageBehaviour(CyclicBehaviour):

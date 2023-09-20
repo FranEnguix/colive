@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraRotateCommand : ICommand {
-    public string AgentName { get; set; }
+    public string Name { get; set; }
 
     public int CameraIndex { get; set; }
 
@@ -12,7 +12,7 @@ public class CameraRotateCommand : ICommand {
     public float Degrees { get; set; }
 
     public void Execute(Dictionary<string, GameObject> gameObjects) {
-        var agent = gameObjects[AgentName];
+        var agent = gameObjects[Name];
         if (agent != null) {
             var entityComponent = agent.GetComponent<Entity>();
             entityComponent.CameraRotate(CameraIndex, RotateAxis, Degrees);

@@ -12,7 +12,9 @@
             "imageFolderName": "captures",
             "enableAgentCollision": true,
             "prefabName": "Tractor",
-            "position": "Spawner 1"
+            "position": "Spawner 1",
+            "algorithms": [],
+            "behaviour": "color_behaviour"
         },
         {
             "name": "agente2",
@@ -22,17 +24,9 @@
             "imageFolderName": "captures",
             "enableAgentCollision": true,
             "prefabName": "Tractor",
-            "position": "Spawner 2"
-        },
-        {
-            "name": "agente3",
-            "at": "localhost",
-            "password": "xmppserver",
-            "folderCapacitySize": 80,
-            "imageFolderName": "captures",
-            "enableAgentCollision": true,
-            "prefabName": "Tractor",
-            "position": "Spawner 3"
+            "position": "Spawner 2",
+            "algorithms": [],
+            "behaviour": "color_behaviour"
         }
     ]
 }

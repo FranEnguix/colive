@@ -5,5 +5,5 @@ using UnityEngine;
 public interface ICommand
 {
     public void Execute(Dictionary<string, GameObject> gameObjects);
-    public string AgentName { get; set; }
+    public string Name { get; set; }
 }

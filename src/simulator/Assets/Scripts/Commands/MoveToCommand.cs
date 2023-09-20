@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class MoveToCommand : ICommand
 {
-    public string AgentName { get; set; }
+    public string Name { get; set; }
     public Vector3 Position { get; set; }
     //public float[] Position { get; set; }
 
     public void Execute(Dictionary<string, GameObject> gameObjects) {
-        GameObject gameObj = gameObjects[AgentName];
+        GameObject gameObj = gameObjects[Name];
         var entityComponent = gameObj.GetComponent<Entity>();
         if (entityComponent.NavMeshAgent != null) {
             // var newPosition = new Vector3(Position[0], Position[1], Position[2]);

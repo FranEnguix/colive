@@ -4,7 +4,6 @@ from queue import LifoQueue
 from datetime import datetime
 
 from image_data import ImageData
-from entity_shell import EntityShell
 from spade.behaviour import State
 
 # --------------------------------------------- #
@@ -16,6 +15,10 @@ STATE_COGNITION = "STATE_COGNITION"
 STATE_ACTION = "STATE_ACTION"
     
 class StateInit(State):
+    def __init__(self, shell):
+        super().__init__()
+        self.__shell = shell
+
     async def on_start(self):
         behaviour = self.agent.behaviours[0]
         # self.__image_socket = behaviour.image_socket
@@ -35,10 +38,14 @@ class StateInit(State):
 
     async def run(self):
         print(f"{self.agent.name}: state {STATE_INIT}.")
-        await EntityShell.init(self.agent)
+        await self.__shell.init(self.agent)
         self.set_next_state(STATE_PERCEPTION)
 
 class StatePerception(State):
+    def __init__(self, shell):
+        super().__init__()
+        self.__shell = shell
+
     async def on_start(self):
         behaviour = self.agent.behaviours[0]
         # self.__commander = behaviour.commander
@@ -46,7 +53,7 @@ class StatePerception(State):
     async def run(self):
         print(f"{self.agent.name}: state {STATE_PERCEPTION}.")
         data = self.save_images()
-        await EntityShell.perception(self.agent, data)
+        await self.__shell.perception(self.agent, data)
         self.set_next_state(STATE_COGNITION)
 
     def save_images(self):
@@ -67,21 +74,29 @@ class StatePerception(State):
 
 
 class StateCognition(State):
+    def __init__(self, shell):
+        super().__init__()
+        self.__shell = shell
+
     async def on_start(self):
         behaviour = self.agent.behaviours[0]
         # self.__commander = behaviour.commander
 
     async def run(self):
         print(f"{self.agent.name}: state {STATE_COGNITION}.")
-        await EntityShell.cognition(self.agent)
+        await self.__shell.cognition(self.agent)
         self.set_next_state(STATE_ACTION)
 
 class StateAction(State):
+    def __init__(self, shell):
+        super().__init__()
+        self.__shell = shell
+
     async def on_start(self):
         behaviour = self.agent.behaviours[0]
         # self.__commander = behaviour.commander
 
     async def run(self):
         print(f"{self.agent.name}: state {STATE_ACTION}.")
-        await EntityShell.action(self.agent)
+        await self.__shell.action(self.agent)
         self.set_next_state(STATE_PERCEPTION)

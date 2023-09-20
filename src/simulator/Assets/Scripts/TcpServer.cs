@@ -83,11 +83,11 @@ public class TcpServer : MonoBehaviour
             if (commandQueue.TryDequeue(out ICommand command)) {
                 command.Execute(entities);
                 if (command is CreateCommand create) {
-                    if (!entities.ContainsKey(create.AgentName))
+                    if (!entities.ContainsKey(create.Name))
                         CreateEntity(create);
                     else
                         ReconnectEntity(create);
-                    SendPositionOfAvatarAgent(entities[create.AgentName]);
+                    SendPositionOfAvatarAgent(entities[create.Name]);
                 }
             }
     }
@@ -109,9 +109,9 @@ public class TcpServer : MonoBehaviour
 	private void CreateEntity(CreateCommand command) {
         GameObject agentPrefab = GetAgentPrefab(command.AgentPrefab);
         GameObject entity = InstantiateEntity(agentPrefab, command);
-        entity.name = command.AgentName;
+        entity.name = command.Name;
         entities.Add(entity.name, entity);
-        var tcpClient = tcpCommandClients.Find(x => x.AgentName == command.AgentName);
+        var tcpClient = tcpCommandClients.Find(x => x.AgentName == command.Name);
         var entityComponent = entity.GetComponent<Entity>();
         // entityComponent.TcpCommandManager = tcpClient;
         entityComponent.AgentCollision = command.AgentCollision;
@@ -140,8 +140,8 @@ public class TcpServer : MonoBehaviour
     }
 
     private void ReconnectEntity(CreateCommand command) {
-        var entity = entities[command.AgentName];
-        var tcpCommandManagers = tcpCommandClients.FindAll(x => x.AgentName == command.AgentName);
+        var entity = entities[command.Name];
+        var tcpCommandManagers = tcpCommandClients.FindAll(x => x.AgentName == command.Name);
         TcpCommandManager tcpCommandManager = null;
         bool commandManagerConnection = false;
         foreach (var commandManager in tcpCommandManagers)

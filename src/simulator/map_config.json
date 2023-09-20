@@ -16,27 +16,28 @@
         {
             "symbol": "B",
             "prefabName": "Tree Fruit Variant",
-            "dataFolder": "C:/Users/LuisHL/Prueba_Five/oranges/black spot"
+            "dataFolder": "../../release/windows-server/oranges/black spot"
         },
         {
             "symbol": "C",
             "prefabName": "Tree Fruit Variant",
-            "dataFolder": "C:/Users/LuisHL/Prueba_Five/oranges/canker"
+            "dataFolder": "../../release/windows-server/oranges/canker"
         },
         {
             "symbol": "G",
             "prefabName": "Tree Fruit Variant",
-            "dataFolder": "C:/Users/LuisHL/Prueba_Five/oranges/greening"
+            "dataFolder": "../../release/windows-server/oranges/greening"
         },
         {
             "symbol": "H",
             "prefabName": "Tree Fruit Variant",
-            "dataFolder": "C:/Users/LuisHL/Prueba_Five/oranges/healthy"
+
+            "dataFolder": "../../release/windows-server/oranges/healthy"
         },
         {
             "symbol": "S",
             "prefabName": "Tree Fruit Variant",
-            "dataFolder": "C:/Users/LuisHL/Prueba_Five/oranges/scab"
+            "dataFolder": "../../release/windows-server/oranges/scab"
         },
         {
             "symbol": "A",

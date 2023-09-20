@@ -1,4 +1,5 @@
 import asyncio
+import importlib
 import json
 import socket
 import sys
@@ -18,23 +19,30 @@ from entity_state import StateInit, StatePerception, StateCognition, StateAction
 from commander import Axis
 
 class EntityAgent(Agent):
-    def __init__(self, agent_jid: str, password: str, folder_capacity_size: int, image_folder_name: str, enable_agent_collision: bool, prefab_name: str, starter_position: dict, fiveserver_jid: str):
+    def __init__(self, agent_jid: str, password: str, folder_capacity_size: int, image_folder_name: str, enable_agent_collision: bool, prefab_name: str, starter_position: dict, fiveserver_jid: str, algorithms: list[str], behaviour_path: str):
         Agent.__init__(self, agent_jid, password)
         self.folder_capacity_size = folder_capacity_size
         self.image_folder_name = image_folder_name
         self.agent_collision = enable_agent_collision
         self.prefab_name = prefab_name
         self.starter_position = starter_position
+        self.__algorithms = algorithms
         self.__server_jid = fiveserver_jid
+        self.__behaviour_path = behaviour_path
 
     async def setup(self):
+        await super().setup()
+        class_name = "EntityShell"
+        behaviour_class_path = f"behaviours.{self.__behaviour_path}"
+        behaviour_class = getattr(importlib.import_module(behaviour_class_path), class_name)
+        
         fsm_behaviour = AgentBehaviour()
 
         # STATES
-        fsm_behaviour.add_state(name=STATE_INIT, state=StateInit(), initial=True)
-        fsm_behaviour.add_state(name=STATE_PERCEPTION, state=StatePerception())
-        fsm_behaviour.add_state(name=STATE_COGNITION, state=StateCognition())
-        fsm_behaviour.add_state(name=STATE_ACTION, state=StateAction())
+        fsm_behaviour.add_state(name=STATE_INIT, state=StateInit(behaviour_class), initial=True)
+        fsm_behaviour.add_state(name=STATE_PERCEPTION, state=StatePerception(behaviour_class))
+        fsm_behaviour.add_state(name=STATE_COGNITION, state=StateCognition(behaviour_class))
+        fsm_behaviour.add_state(name=STATE_ACTION, state=StateAction(behaviour_class))
 
         # TRANSITIONS
         fsm_behaviour.add_transition(source=STATE_INIT, dest=STATE_PERCEPTION)
@@ -56,7 +64,7 @@ class EntityAgent(Agent):
         self.image_queue = LifoQueue()
         self.add_behaviour(AgentImageBehaviour(), image_template)
 
-
+        
     async def send_msg_to_server_and_wait(self, msg:str) -> str:
         """
         Send a message and waits for a response

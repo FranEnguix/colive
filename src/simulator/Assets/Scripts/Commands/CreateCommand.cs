@@ -1,10 +1,13 @@
+using S22.Xmpp;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CreateCommand : ICommand {
 
-    public string AgentName { get; set; }
+    public string Name { get; set; }
+
+    public Jid Jid { get; set; }
 
     public string AgentPrefab { get; set; }
 
