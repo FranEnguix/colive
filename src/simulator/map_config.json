@@ -31,8 +31,7 @@
         {
             "symbol": "H",
             "prefabName": "Tree Fruit Variant",
-
-            "dataFolder": "../../release/windows-server/oranges/healthy"
+            "dataFolder": "../../release/windows-server/oranges/healthy"       
         },
         {
             "symbol": "S",
