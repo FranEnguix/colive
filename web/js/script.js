@@ -351,7 +351,7 @@ window.addEventListener('load', function(e) {
         download("map.json", JSON.stringify(demo, null, 4));
     });
 
-    const btnImportPrefabs = document.querySelector("[name='importPrefabs']")
+    const btnImportPrefabs = document.querySelector("[name='importPrefabs']");
     btnImportPrefabs.addEventListener('change', () => {
         const file = btnImportPrefabs.files[0];
         const reader = new FileReader();
@@ -372,6 +372,7 @@ window.addEventListener('load', function(e) {
     });
 
     linkImportLabelsToButtons(document.getElementById("import-menu"));    
+    linkImportLabelsToButtons(document.getElementById("bitmap-generator"));    
 });
 
 

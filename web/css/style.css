@@ -135,6 +135,45 @@ body #import-menu div[data-link]:hover {
     background-color: #817A91;
 }
 
+
+/* Bitmap generator => */
+body #bitmap-generator {
+    border-radius: 40px;
+    background-color: #5D6171;
+}
+
+body #bitmap-generator input[type='file'] {
+    display: none;
+}
+
+body #bitmap-generator div[data-link] {
+    background-color: #7A738A;
+    display: inline-block;
+    border: 1px solid #15001829;
+    border-radius: 15px;
+    padding: 10px 25px;
+    cursor: pointer;
+}
+
+body #bitmap-generator div[data-link]:hover {
+    background-color: #969ab2;
+}
+
+body #generateImage {
+    font-size: medium;
+    padding: 10px;
+    margin: 10px;
+    background-color: #685270;
+    border: 1px solid #15001829;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+body #generateImage:hover {
+    background-color: #9B8F9F;
+}
+/* Bitmap generator <= */
+
 body #menu {
     display: inline-flex;
     flex-direction: row;
