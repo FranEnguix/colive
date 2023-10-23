@@ -1,20 +1,144 @@
+class Point3D {
+    constructor(x, y, z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+}
 
-class ObstacleParser {
+class FiveMap {
+    constructor(elements, origin, width = null, height = null) {
+        this._elements = elements;
+        this.origin = origin || new Point3D(0, 0, 0);
+        this._width = width;
+        this._height = height;
+    }
+
+    get width() {
+        if (this._width == null) {
+            this.processWidthAndHeight();
+        }
+        return this._width;
+    }
+
+    get height() {
+        if (this._height == null) {
+            this.processWidthAndHeight();
+        }
+        return this._height;
+    }
+
+    get elements() {
+        return this._elements;
+    }
+
+    processWidthAndHeight() {
+        let width = 0;
+        let height = 0;
+        
+        let y = 0;
+        this._elements.forEach((element) => {
+            if (element.y != null)
+            return; // TODO
+        });
+
+
+        this.width = width;
+        this.height = height;
+    }
+}
+
+class Element {
+    constructor(x, y, obstacle) {
+        this.x = x;
+        this.y = y;
+        this._obstacle = obstacle;
+    }
+
+    width() {
+        throw new Error("The 'width' method must be implemented in subclasses.");
+    }
+
+    height() {
+        throw new Error("The 'height' method must be implemented in subclasses.");
+    }
+  
+    isObstacle() {
+        return this._obstacle == null || this._obstacle;
+    }
+}
+
+class RectangleElement extends Element {
+    constructor(x, y, obstacle, width, height) {
+        super(x, y, obstacle);
+        this._width = width;
+        this._height = height;
+    }
+
+    width() {
+        return this._width;
+    }
+
+    height() {
+        return this._height;
+    }
+
+    draw(context, color='black') {
+        context.fillStyle = color;
+        context.fillRect(this.x, this.y, this._width, this._height);
+    }
+}
+
+class CircleElement extends Element {
+    constructor(x, y, obstacle, radius) {
+        super(x, y, obstacle);
+        this.radius = radius;
+    }
+
+    width() {
+        return this.radius * 2;
+    }
+
+    height() {
+        return this.width();
+    }
+
+    draw(context, color='black') {
+        context.beginPath();
+        context.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+        context.fillStyle = color;
+        context.fill();
+        context.closePath();
+    }
+}
+
+
+class FiveFilesParser {
     constructor(mapConfigFiles, mapFiles) {
         this._mapConfigFiles = mapConfigFiles;
         this._mapFiles = mapFiles;
-        this._obstacles = [];
         this._mapsInfo = null;
         this._mapConfigInfo = null;
+        this._fiveMap = null;
     }
 
-    async parseObstacles() {
+    get fiveMap() {
+        return this._fiveMap;
+    }
+
+    async parseFiveFiles() {
+        const elements = [];
+
         this._mapConfigInfo = await this.parseMapConfigFile();
         console.log("Config info:", this._mapConfigInfo);
 
         this._mapsInfo = await this.parseMapFiles();
         console.log("Maps info:", this._mapsInfo);
         // this.parseMapFiles(this._mapFiles);
+
+        let origin = this._mapConfigInfo[0].origin;
+        this._fiveMap = new FiveMap(elements, new Point3D(origin.x, origin.y, origin.z));
+        return this._fiveMap;
     }
 
     async parseMapConfigFile() {
@@ -91,42 +215,47 @@ class ObstacleParser {
 
         try {
             const dataArray = await readFiles(files);
-            return dataArray;
+            let parsedFileArray = []; 
+            dataArray.forEach(array => {
+                parsedFileArray.push(array.split(/\r\n|\r|\n/));
+            });
+            return parsedFileArray; // 2D Array [ ["A A A A", "A B A B"], [" C C C", "B A B A"] ]
         } catch (error) {
             console.error(error);
             return null;
         }   
     }
-
-
-
-    get obstacles() {
-        return this._obstacles;
-    }
-
 }
 
 class BitmapGenerator {
-    constructor(filename, width, height, obstacleParser) {
+    constructor(filename, width, height, elements) {
         this.filename = filename;
         this.width = width;
         this.height = height;
-        this.obstacleParser = obstacleParser;
+        this.elements = elements;
     }
-
-    
 
     generate() {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
 
-        // Set the canvas size based on the class properties
         canvas.width = this.width;
         canvas.height = this.height;
 
-        // Fill the canvas with white
         ctx.fillStyle = 'white';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        this.elements.forEach((element) => {
+            // Draw black rectangle
+            ctx.fillStyle = 'black';
+            if (element.shape === 'square')
+                ctx.fillRect(
+                    element.x, element.y,
+                    element.width, element.height
+                );
+            else if (element.shape === 'circle')
+                this.drawCircle(ctx, element.x, element.y, element.width);
+        });
 
         // Draw black lines
         ctx.strokeStyle = 'black';
@@ -144,16 +273,27 @@ class BitmapGenerator {
         ctx.lineTo(this.width, this.height / 2);
         ctx.stroke();
 
+        this.download(this.filename, canvas);
+        canvas.remove();
+    }
+
+    drawCircle(context, x, y, radius, color = 'black') {
+        context.fillStyle = color;
+        context.beginPath();
+        context.arc(x, y, radius, 0, 2 * Math.PI);
+        context.fill();
+      }
+
+    download(filename, canvas) {
         // Convert the canvas to a data URL
         const dataURL = canvas.toDataURL('image/bmp');
 
-        // Create a download link
+        // Download bitmap
         const downloadLink = document.createElement('a');
         downloadLink.href = dataURL;
-        downloadLink.download = 'black_and_white_image.bmp';
+        downloadLink.download = filename;
         downloadLink.click();
         downloadLink.remove();
-        canvas.remove();
     }
 
 }
@@ -256,16 +396,16 @@ window.addEventListener('load', function(e) {
     btn.addEventListener('click', async function () {
         
 
-        const obstacleParser = new ObstacleParser(
+        const fiveFilesParser = new FiveFilesParser(
             btnMapConfig.files,
             btnMaps.files
         );
-        await obstacleParser.parseObstacles();
+        const fiveMap = await fiveFilesParser.parseFiveFiles();
         const bmGenerator = new BitmapGenerator(
             'prueba.bmp',
-            300,
-            300,
-            obstacleParser
+            fiveMap.width(),
+            fiveMap.height(),
+            fiveMap.elements()
         );
         bmGenerator.generate();
     });
