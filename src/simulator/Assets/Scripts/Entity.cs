@@ -36,7 +36,7 @@ public class Entity : MonoBehaviour
 
     private int conexionNumber;
 
-    private float radioCom=24;
+    private float radioCom=48;
     private Dictionary<string, GameObject> entities;
     private Dictionary<string, GameObject> comBeams;
    
@@ -172,8 +172,39 @@ public class Entity : MonoBehaviour
         //private Dictionary<string, LineRenderer> comBeams;
         int counter=-1;
         //comBeams = new Dictionary<string, GameObject>();
+        Gradient tempGradient = new Gradient();
+        float alpha = 1.0f;
         entities = GameObject.Find("Agent Manager").GetComponent<XmppCommunicationManager>().Entities;
-       
+        
+        GradientColorKey[] tempColorKeys = new GradientColorKey[8];
+        int nColor=0;
+        while (nColor<8){
+            if (nColor<4)
+                tempColorKeys[nColor] = new GradientColorKey (Color.blue,1.0f / 7 * nColor);
+            else
+                tempColorKeys[nColor] = new GradientColorKey (Color.yellow,1.0f / 7 * nColor);
+            nColor++;
+        }
+        tempGradient.colorKeys = tempColorKeys;
+        /*tempGradient.SetKeys(
+            new GradientColorKey[] { new GradientColorKey(Color.blue, 0.0f),
+                                     new GradientColorKey(Color.blue, 0.25f),
+                                     new GradientColorKey(Color.blue, 0.5f),
+                                     new GradientColorKey(Color.yellow, 0.75f), 
+                                     new GradientColorKey(Color.yellow, 1.0f) },
+            new GradientAlphaKey[] { new GradientAlphaKey(alpha, 0.0f), 
+                                     new GradientAlphaKey(alpha, 0.25f),
+                                      new GradientAlphaKey(alpha, 0.50f),
+                                       new GradientAlphaKey(alpha, 0.75f),
+                                        new GradientAlphaKey(alpha, 1.0f)} 
+            
+        );
+        */
+
+	    
+
+	    
+
 
        // bool itself=false;
         foreach(var element in entities){
@@ -203,12 +234,16 @@ public class Entity : MonoBehaviour
                 
                 //Debug.Log("Dist 1 "+element.Value.name+" "+comBeams[element.Value.name]);
                 newBeam=comBeams[element.Value.name].GetComponent<LineRenderer>();
-               
-                newBeam.positionCount = 4;
+                newBeam.material = new Material(Shader.Find("Sprites/Default"));
+                newBeam.positionCount = 2;
+                
                 newBeam.SetPosition(0, element.Value.transform.position);
 
                 // Debug.Log("Dist 2 "+ element.Value.transform.position);
                 newBeam.SetPosition(1,transform.position); 
+                /*newBeam.startColor=Color.blue;
+                newBeam.endColor=Color.yellow;*/
+                newBeam.colorGradient = tempGradient;
                 // Debug.Log("Dist 3 "+ transform.position); 
             }
         }   
