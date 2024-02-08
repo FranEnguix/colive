@@ -113,7 +113,7 @@ def main():
         for thread in threads:
             thread.join()
     else:
-        default_config = create_default_config_file(filename)
+        default_config = create_default_config_file(configuration_filename)
         if (default_config):
             print(f"{configuration_filename} was not present and it is now created with a default configuration.")
 

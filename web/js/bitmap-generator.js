@@ -36,12 +36,16 @@ class FiveMap {
         let width = 0;
         let height = 0;
         
-        let y = 0;
         this._elements.forEach((element) => {
-            if (element.y != null)
-            return; // TODO
+            let elementPosX = element.x + element.width() / 2;
+            if (elementPosX > width) {
+                width = elementPosX;
+            }
+            let elementPosY = element.y + element.height() / 2;
+            if (elementPosY > height) {
+                height = elementPosY;
+            }
         });
-
 
         this.width = width;
         this.height = height;
@@ -129,14 +133,41 @@ class FiveFilesParser {
     async parseFiveFiles() {
         const elements = [];
 
-        this._mapConfigInfo = await this.parseMapConfigFile();
+        this._mapConfigInfo = (await this.parseMapConfigFile())[0];
         console.log("Config info:", this._mapConfigInfo);
 
-        this._mapsInfo = await this.parseMapFiles();
+        let symbolToPrefabMap = new Map();
+        this._mapConfigInfo.symbolToPrefab.forEach(entry => {
+            let elementProperties = {
+                shape: entry.shape || 'rectangle',
+                obstacle: entry.obstacle || true,
+                width: entry.width || 10,
+                height: entry.height || 10,
+            };
+            symbolToPrefabMap.set(entry.symbol, elementProperties);
+        });
+
+        this._mapsInfo = (await this.parseMapFiles()[0]);
         console.log("Maps info:", this._mapsInfo);
         // this.parseMapFiles(this._mapFiles);
 
-        let origin = this._mapConfigInfo[0].origin;
+        let x = this._mapConfigInfo.origin.x;
+        let z = this._mapConfigInfo.origin.z;
+        this._mapsInfo.forEach((line) => {
+            for (let i = 0; i < line.length; i++) {
+                let symbol = line[i];
+                let elementProperties = symbolToPrefabMap.get(symbol);
+                let el = null;
+                if (elementProperties.shape == 'circle') {
+
+                } else {
+                    el = new RectangleElement(elementProperties)
+                }
+                elements.push(el);
+            }
+        });
+
+        let origin = this._mapConfigInfo.origin;
         this._fiveMap = new FiveMap(elements, new Point3D(origin.x, origin.y, origin.z));
         return this._fiveMap;
     }
