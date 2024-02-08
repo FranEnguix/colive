@@ -50,7 +50,7 @@ public class XmppCommunicationManager : MonoBehaviour
         // var task = Task.Run(async () => await DequeueAndProcessCommand());
         // task.Wait();
         if (Input.GetKeyDown(KeyCode.Space)) {
-            Debug.Log(xmppClient.Connected);
+            Debug.Log($"XMPP is connected?: {xmppClient.Connected}");
         }
 
     }
@@ -112,6 +112,16 @@ public class XmppCommunicationManager : MonoBehaviour
         EnqueueCommandFromMessage(e.Message.From, e.Message.Body);
         // XmppCommunicator.SendXmppCommand(xmppClient, to: agent, from: fiveserver, "position 0 10 0");
     }
+
+    private void LinkXmppError() {
+        xmppClient.Error += OnXmppError;
+
+    }
+
+    private void OnXmppError(object sender, ErrorEventArgs e) {
+        Debug.Log(e.ToString());
+    }
+
 
     private SubmitForm RegisterInBandCallback(RequestForm form) {
         if (!String.IsNullOrEmpty(form.Instructions))

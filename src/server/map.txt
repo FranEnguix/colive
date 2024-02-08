@@ -1,17 +1,12 @@
-A A A A A
- B C G H S
- B C G H S
- B C G H S
- B C G H S
- B C G H S
- B C G H S
- B C G H S
- B C G H S
- B C G H S
- B C G H S
- B C G H S
- B C G H S
- B C G H S
- B C G H S
- B C G H S
- B C G H S
+ A   A   A
+B E C C H D
+D H B D G B 
+B B G B E E 
+G C I J E G 
+B D B B D B 
+D B C E B C 
+B D G G D D 
+B B C E B H 
+D D B C B B 
+C E I I C B 
+
