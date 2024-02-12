@@ -2,11 +2,11 @@
     "origin": {
         "x": 0.0,
         "y": 0.0,
-        "z": 15.0
+        "z": 0.0
     },
     "distance": {
         "x": 6,
-        "y": 3
+        "y": 6
     },
     "symbolToPrefabMap": [
         {
@@ -15,28 +15,35 @@
         },
         {
             "symbol": "B",
-            "prefabName": "Tree Fruit Variant",
-            "dataFolder": "../../release/windows-server/oranges/black spot"
+            "prefabName": "Vine growth 00"
         },
         {
             "symbol": "C",
-            "prefabName": "Tree Fruit Variant",
-            "dataFolder": "../../release/windows-server/oranges/canker"
+            "prefabName": "Vine growth 01"
+        },
+        {
+            "symbol": "D",
+            "prefabName": "Vine growth 02"
+        },
+        {
+            "symbol": "E",
+            "prefabName": "Vine growth 03"
         },
         {
             "symbol": "G",
-            "prefabName": "Tree Fruit Variant",
-            "dataFolder": "../../release/windows-server/oranges/greening"
+            "prefabName": "Vine growth 04"
         },
         {
             "symbol": "H",
-            "prefabName": "Tree Fruit Variant",
-            "dataFolder": "../../release/windows-server/oranges/healthy"
+            "prefabName": "Vine growth 05"
         },
         {
-            "symbol": "S",
-            "prefabName": "Tree Fruit Variant",
-            "dataFolder": "../../release/windows-server/oranges/scab"
+            "symbol": "I",
+            "prefabName": "Vine growth 06"
+        },
+        {
+            "symbol": "J",
+            "prefabName": "Vine growth 07"
         },
         {
             "symbol": "A",
