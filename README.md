@@ -28,7 +28,7 @@ https://github.com/Unity-Technologies/URDF-Importer.git?path=/com.unity.robotics
 
 To install this packages you need to open Window > Package Manager, click the + icon and select Add Package from git URL. Then, you have to copy and paste the urls described above, one by one.
 
-### Five client
+### FIVE client
 The SPADE agents are required to clone the [src/client](src/client/) folder and install the SPADE package. You can install it by executing:
 
 `
