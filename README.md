@@ -13,7 +13,11 @@ FIVE is available for Windows, Linux and MacOS. You will find a *vanilla* versio
 If you prefer to build the server yourself, you can clone the [src/server](src/server/) folder and compile your own version of the FIVE server. When you open the Unity project, you will need three packages to run the simulation:
 `
 https://github.com/Unity-Technologies/ROS-TCP-Connector.git?path=/com.unity.robotics.ros-tcp-connector
+`
+`
 https://github.com/Unity-Technologies/ROS-TCP-Connector.git?path=/com.unity.robotics.visualizations
+`
+`
 https://github.com/Unity-Technologies/URDF-Importer.git?path=/com.unity.robotics.urdf-importer#v0.5.2
 `
 To install this packages you need to open Window > Package Manager, click the + icon and select Add Package from git URL. Then, you have to copy and paste the urls described above, one by one.
@@ -22,6 +26,8 @@ The SPADE agents are required to clone the [src/client](src/client/) folder and 
 
 `
 pip install spade==2.3.2
+`
+`
 pip install pytz
 `	
 
